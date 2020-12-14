@@ -1,0 +1,45 @@
+      <div class="right">
+        <b>Factura.</b> {{report_nombre}}<br>
+        <b>Fecha</b> {{v_fechai}} Hasta {{v_fechaf}}<br>
+      </div>
+      
+      <div>
+        <b>Datos de la importadora</b><br>
+        {{impor_nombre}}<br>
+        {{impor_ruc}}<br>
+        {{impor_direccion}} | {{impor_telefono}}
+        
+        <!---<b>Customer</b>
+        {{ invoice.contact.name }}<br>
+        {{ invoice.contact.post_address | multi_line }}--->
+      </div>
+      
+      <h1>Compras</h1>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombres</th>
+            <th>RUC</th>
+            <th>Teléfono</th>
+            <th class="text-center">Costo</th>
+            <th class="text-center">Precio al público</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{table_row}}   
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="bold">Total</td>
+                <td class="bold">$ {{total}}</td>
+            </tr> 
+        </tfoot>
+      </table>

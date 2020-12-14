@@ -1,0 +1,33 @@
+      <div class="right">
+        <b>Factura.</b> {{report_nombre}}<br>
+        <b>Fecha</b> {{v_fechai}} Hasta {{v_fechaf}}<br>
+      </div>
+      
+      <div>
+        <b>Datos de la importadora</b><br>
+        {{impor_nombre}}<br>
+        {{impor_ruc}}<br>
+        {{impor_direccion}} | {{impor_telefono}}
+        
+        <!---<b>Customer</b>
+        {{ invoice.contact.name }}<br>
+        {{ invoice.contact.post_address | multi_line }}--->
+      </div>
+      
+      <h1>INFORM DE REGISTRO DE CLIENTE</h1>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha de registro</th>
+            <th>Nombre del cliente</th>
+            <th>Cédula del cliente</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{table_row}}   
+        </tbody>
+      </table>

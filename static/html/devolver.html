@@ -1,0 +1,33 @@
+      <div class="right">
+        <b>Factura.</b> {{report_nombre}}<br>
+        <b>Fecha</b> {{v_fechai}} Hasta {{v_fechaf}}<br>
+      </div>
+      
+      <div>
+        <b>Datos de la importadora</b><br>
+        {{impor_nombre}}<br>
+        {{impor_ruc}}<br>
+        {{impor_direccion}} | {{impor_telefono}}
+        
+        <!---<b>Customer</b>
+        {{ invoice.contact.name }}<br>
+        {{ invoice.contact.post_address | multi_line }}--->
+      </div>
+      
+      <h1>Informe de devoluciones</h1>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>N° Serie</th>
+            <th>Motivo</th>
+            <th>Resultado</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{table_row}}   
+        </tbody>
+      </table>

@@ -1,0 +1,20 @@
+body{
+  font-family: Montserrat,sans-serif;
+}
+table {width: 100%; border-collapse: collapse;}
+td, th {
+  border: solid 1px black;  
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+h1 {text-align: center;}
+.right {
+  right: 80px;
+  position: absolute;
+}
+.bold{
+  font-weight: bold;
+  font-size: 20px;
+}

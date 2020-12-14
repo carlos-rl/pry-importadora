@@ -1,0 +1,78 @@
+
+.sbox {
+  webkit-box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+  -moz-box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+  -ms-box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+  -o-box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+  box-shadow: 0 1px 0px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+}
+#menu .icon{
+    margin: 1px;
+    text-align: center;
+    float: left;
+    width: 150px;
+    height: 180px;
+}
+#menu .icon:hover{
+    background: #1e1e1e;
+    color: #f9fcff;
+}
+
+#menu .icon .iconimage img{
+    height: 62px;
+
+}
+#menu .icon .iconname .tituloicon{
+    font-size: 13px;
+    font-weight: bold;
+}
+#menu .icon .iconname .icondesc{
+    font-size: 12px;
+}
+
+.nav {
+    font-family:arial,sans-serif;
+    font-size:13px;
+}
+.navbar-blue {
+    background-color:#3B5999;
+    color:#ffffff;
+    font-family:arial,sans-serif;
+    top:0;
+}
+
+.navbar-blue li > a,.navbar-toggle  {
+    color:#efefef;
+}
+
+.navbar-blue .dropdown-menu li a {color:#2A4888;}
+.navbar-blue .dropdown-menu li > a {padding-left:30px;}
+
+.navbar-blue li>a:hover, .navbar-blue li>a:focus, .navbar-blue .open, .navbar-blue .open>a, .navbar-blue .open>a:hover, .navbar-blue .open>a:focus {
+    background-color:#2A4888;
+    color:#fff;
+}
+a {
+    color:#222222;
+}
+
+a:hover {
+    text-decoration:none;
+}
+
+.modal.modal-wide .modal-dialog {
+    width: 76%;
+}
+
+.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+.totales {
+    width: auto;
+    display: block;
+}
+
+.totales td {
+    padding: 2px;
+}
