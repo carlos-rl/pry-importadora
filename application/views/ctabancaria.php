@@ -61,6 +61,14 @@
                     postfix: '$',
                     verticalbuttons: false
                 });
+                $('#field-saldo').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9.]/g,'');
+                });
+                $('#field-saldo').attr('maxlength', 8);
+                $('#field-numero').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                });
+                $('#field-numero').attr('maxlength', 15);
             })
         </script>
 

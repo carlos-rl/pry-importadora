@@ -120,10 +120,11 @@
 
                 <div class="sidebar-submenu">
                     <ul>
-                        <li><a href="<?= base_url('venta/informe') ?>" title="Informe de ventas"><span>Ventas</span></a></li>
-                        <li><a href="<?= base_url('compra/informe') ?>" title="Informe de compras"><span>Compras</span></a></li>
-                        <li><a href="<?= base_url('gasto/informe') ?>" title="Informe de Gastos"><span>Gastos</span></a></li>
-                        <li><a href="<?= base_url('proveedor/informe') ?>" title="Informe de Proveedor"><span>Proveedor</span></a></li>
+                        <li><a href="<?= base_url('venta/informe') ?>" title="Informe de ventas"><span>Informe de ventas</span></a></li>
+                        <li><a href="<?= base_url('compra/informe') ?>" title="Informe de compras"><span>Informe de compras</span></a></li>
+                        <li><a href="<?= base_url('cliente/informe') ?>" title="Informe de cliente"><span>Informe de registros de clientes</span></a></li>
+                        <li><a href="<?= base_url('gasto/informe') ?>" title="Informe de Gastos"><span>Informe de gastos</span></a></li>
+                        <li><a href="<?= base_url('proveedor/informe') ?>" title="Informe de Proveedor"><span>Informe de proveedores</span></a></li>
                         <li><a href="<?= base_url('ctaporpagar/informe') ?>" title="Informe de cuenta por pagar"><span>Informe de cuenta por pagar</span></a></li>
                         <li><a href="<?= base_url('credito/informe') ?>" title="Informe de ventas a créditos"><span>Informe de ventas a créditos</span></a></li>
                         <li><a href="<?= base_url('devolverventa/informe') ?>" title="Informe de devoluciones"><span>Informe de devoluciones</span></a></li>

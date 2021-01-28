@@ -199,12 +199,12 @@
                         idcredito = ins.idcredito;
                         html += '<td align="center">' + ins.fechapagar + '</td>';
                         html += '<td align="center">' + (ins.fechapagado==null?'No pagado':ins.fechapagado) + '</td>';
-                        html += '<td align="center">$' + parseFloat(ins.valorcuota).toFixed(3) + '</td>';
-                        html += '<td align="center">$' + parseFloat(ins.saldo).toFixed(3) + '</td>';
+                        html += '<td align="center">$' + parseFloat(ins.valorcuota).toFixed(2) + '</td>';
+                        html += '<td align="center">$' + parseFloat(ins.saldo).toFixed(2) + '</td>';
                         if((ins.valorcuota - ins.saldo) == '0'){
-                            html += '<td align="center">$' + (ins.valorcuota - ins.saldo).toFixed(3) + '</td>';
+                            html += '<td align="center">$' + (ins.valorcuota - ins.saldo).toFixed(2) + '</td>';
                         }else{
-                            html += '<td align="center"><strong> $' + (ins.valorcuota - ins.saldo).toFixed(3) + ' </strong></td>';
+                            html += '<td align="center"><strong> $' + (ins.valorcuota - ins.saldo).toFixed(2) + ' </strong></td>';
                         }
                         html += '<td align="center">' + (ins.estado=='1'?'<label class="label label-success">Pagado</label>':(ins.estado == '0'?'<label class="label label-danger">Debe</label>':'<label title="Falta completar el pago" class="label label-warning">Falta</label>')) + '</td>';
                         var botones = '';
@@ -230,10 +230,10 @@
                             btns += '<input class="form-control form-xs input-pago input-id-'+ins.idamortizacion_cuotas+'" style="" value="'+ins.valorabonado+'" placeholder="Ingresar un valor 0.0" rel="pago" data-json=\'{"idamortizacion_cuotas":"'+ins.idamortizacion_cuotas+'","action":"valorabonado","idcredito":'+ins.idcredito+', "estado":"'+ins.estado+'", "valorcuota":"'+ins.valorcuota+'", "fechapagar":"'+ins.fechapagar+'"}\'>';
                         }else{
                             if(ins.estado == '1'){
-                                btns += '<input class="form-control form-xs input-pago input-id-'+ins.idamortizacion_cuotas+'" readonly style="" value="'+ins.valorabonado+'" placeholder="Ingresar un valor 0.0">';
+                                btns += '<input class="form-control form-xs input-pago input-id-'+ins.idamortizacion_cuotas+'" readonly style="" value="'+parseFloat(ins.saldo).toFixed(2)+'" placeholder="Ingresar un valor 0.0">';
                             }
                             if(ins.estado == '2'){
-                                btns += '<input class="form-control form-xs input-pago input-id-'+ins.idamortizacion_cuotas+'" readonly style="" value="'+ins.valorabonado+'" placeholder="Ingresar un valor 0.0">';
+                                btns += '<input class="form-control form-xs input-pago input-id-'+ins.idamortizacion_cuotas+'" readonly style="" value="'+parseFloat(ins.saldo).toFixed(2)+'" placeholder="Ingresar un valor 0.0">';
                             }
                             
                         }

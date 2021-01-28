@@ -66,7 +66,7 @@ class Credito extends CI_Controller {
 
     function _callback_cliente($value, $row) {
         $cliente = $this->Data->venta_cliente_buscar($row->idventa);
-		return "<i class='fa fa-user'></i> ". $cliente->nombres.' CI.'.$cliente->cedula ;
+		return $cliente->nombres.' CI.'.$cliente->cedula ;
     }
 
     function _ir_pagos($value, $row) {
@@ -251,7 +251,7 @@ class Credito extends CI_Controller {
             'nombre' => '',
             'ventas' => $this->Data->informe_credito(),
             'data_accessos' => $accesos,
-            'subtitle' => 'Buscar por rango o por Número de venta',
+            'subtitle' => 'Buscar por rango o por cliente',
             'fecha' => $fecha
         ));
     }
@@ -261,7 +261,7 @@ class Credito extends CI_Controller {
             $post = (object) $_POST;
             try {
                 echo '{"lista":'.json_encode(
-                                    $this->Data->creditopagodeuda_venta($post->idventa, $post->fechai, $post->fechaf)
+                                    $this->Data->creditopagodeuda_venta($post->idcliente, $post->fechai, $post->fechaf)
                                 ).'}';
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
@@ -276,7 +276,7 @@ class Credito extends CI_Controller {
             try {
                 require_once(APPPATH . '/libraries/mpdfnew/vendor/autoload.php');
                 $post = (object) $_GET;
-                $dat = $this->Data->creditopagodeuda_venta($post->idventa, $post->fechai, $post->fechaf);
+                $dat = $this->Data->creditopagodeuda_venta($post->idcliente, $post->fechai, $post->fechaf);
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
                 $mpdf->writeHTML(file_get_contents(base_url() . 'static/html/style.css'), \Mpdf\HTMLParserMode::HEADER_CSS);
                 date_default_timezone_set('America/Guayaquil');
@@ -287,6 +287,7 @@ class Credito extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -297,7 +298,7 @@ class Credito extends CI_Controller {
                 $htmlPage = str_ireplace('{{v_fechai}}', $post->fechai, $htmlPage);
                 $htmlPage = str_ireplace('{{v_fechaf}}', $post->fechaf, $htmlPage);
                 $htmlPage = str_ireplace('{{fecha_hoy}}', $fecha, $htmlPage);
-                $htmlPage = str_ireplace('{{report_nombre}}', 'Informe de ventas a créditos', $htmlPage);
+                $htmlPage = str_ireplace('{{report_nombre}}', 'Informes de ventas a créditos', $htmlPage);
                 //FIN DE DATOS DE LA FACTURA
 
                 $total = 0;
@@ -325,7 +326,7 @@ class Credito extends CI_Controller {
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_' . $fecha . '.pdf', 'D');
+                $mpdf->Output('credito_' . $fecha . '.pdf', 'D');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

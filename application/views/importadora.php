@@ -67,7 +67,17 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
-
+        <script>
+            $(function(){
+                $('#nombre').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-z-A-Z\s]/g,'');
+                });
+                $('#field-ruc').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                });
+                $('.filter-row, .footer-tools').remove();
+            })
+        </script>
     </div>
 </body>
 

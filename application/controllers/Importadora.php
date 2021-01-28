@@ -61,12 +61,19 @@ class Importadora extends CI_Controller {
         $crud->required_fields('nombre','ruc','telefono', 'correo');
 
         $crud->field_type('ruc', 'integer');
+        $crud->set_rules('nombre', 'Nombre', 'min_length[5]|max_length[50]|callback_validar_edit_ruc|required' );
         $crud->set_rules('ruc', 'RUC', 'min_length[13]|max_length[13]|callback_validar_edit_ruc|required' );
         $crud->set_rules('correo', 'Correo de la importadora', 'trim|valid_email|max_length[100]|required');
         $crud->set_rules('telefono', 'Teléfono de la importadora', 'min_length[8]|max_length[10]|required');
         $crud->field_type('telefono', 'integer');
-        //$crud->field_type('direccion', 'text');
         $crud->field_type('direccion', 'string');
+
+        $crud->callback_field('nombre',function ($value = '', $primary_key = null) {
+            return '<input type="text" maxlength="50" value="'.$value.'" class="form-control" required id="nombre" name="nombre">';
+        });
+        $crud->callback_field('correo',function ($value = '', $primary_key = null) {
+            return '<input type="email" maxlength="50" value="'.$value.'" title="Introduzca una dirección de correo válida" class="form-control" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required name="correo">';
+        });
 
         $crud->unset_add();
         $crud->unset_delete();

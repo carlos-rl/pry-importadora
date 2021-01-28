@@ -68,7 +68,23 @@
         <script>
             $(function(){
                 $('#field-nombres').on('input',function(){ 
-                    this.value = this.value.replace(/[^a-z-A-Z\s]/g,'');
+                    this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+                });
+                $('#field-nombres').attr('maxlength', 40);
+
+                $('#field-apellidos').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+                });
+                $('#field-apellidos').attr('maxlength', 40);
+
+                $('#field-cedula').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                });
+                $('#field-telefono').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                });
+                $('#correo').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-Z@.ñÑáéíóúÁÉÍÓÚ0-9\s]/g,'');
                 });
             })
         </script>

@@ -80,7 +80,7 @@
                             <div class="col-md-4">
                                 <h2 class="invoice-client mrg10T">Información de la venta:</h2>
                                 <ul class="reset-ul">
-                                    <li style="display: flex;"><b>Fecha:</b> <span><input type="text" id="fecha"
+                                    <li style="display: flex;"><b>Fecha:</b> <span><input type="text" data-inputmask="'alias': 'datetime', 'inputFormat': 'yyyy-mm-dd'" id="fecha"
                                                 class="form-control" value="<?= strftime("%Y-%m-%d") ?>"></span></li>
                                     <li><b>Estado:</b> <span class="bs-label label-warning">Venta no guardada</span>
                                     </li>
@@ -137,7 +137,7 @@
                                     <td colspan="5"></td>
                                     <td class="text-right">
                                         <div class="input-group mb-2 mb-sm-0">
-                                            <input type="number" class="form-control" id="tax" value="" placeholder="0">
+                                            <input type="text" class="form-control" id="tax" value="" placeholder="0">
                                             <div class="input-group-addon">%</div>
                                         </div>
                                     </td>
@@ -215,13 +215,14 @@
                             <div class="row">
                                 <div class="col-md-12"><br>
                                     <label for="">Fecha de inicio de cuotas</label>
-                                    <input type="text" class="form-control" id="fechai" placeholder="Ingresar fecha">
+                                    <input type="text" data-inputmask="'alias': 'datetime', 'inputFormat': 'yyyy-mm-dd'" class="form-control" id="fechai" placeholder="Ingresar fecha">
                                 </div>
                                 <div class="col-md-4"><br>
                                     <label for="">Tipo de intervalo</label>
                                     <select name="" id="tipo" class="form-control">
                                         <option value="1">Mes</option>
                                         <option value="2">Semana</option>
+                                        <option value="3">Cada 15 días</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4"><br>
@@ -263,14 +264,20 @@
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/moment/locale/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/Inputmask/dist/jquery.inputmask.js"></script>
         
         <script>
         $(function() {
             var i_global = 1;
             var idglobal = 1;
+
+            $("#fecha").inputmask();
+            $("#fechai").inputmask();
+
             $('#fecha').datetimepicker({
                 format: 'YYYY-MM-DD'
             });
+            $('#fecha, #fechai').val(moment().format('YYYY-MM-DD'));
             $('#fechai').datetimepicker({
                 format: 'YYYY-MM-DD'
             });
@@ -299,7 +306,7 @@
                 html += '<td class="serie">'+data.serie+'</td>'
                 html += '<td>'+data.mercaderia.nombre+' - '+data.mercaderia.modelo+'</td>'
                 html += '<td>'+data.garantia.text+' mes(es)</td>'
-                html += '<td><input type="text"  id="precio_'+id+'" precio= "'+id+'" value="'+data.precio+'" placeholder="Precio al público" class="form-control price"></td>'
+                html += '<td><input type="text"  id="precio_'+id+'" precio= "'+id+'" value="'+data.precio+'" placeholder="Precio al público" class="form-control price" ></td>'
                 html += '<td class="" style="vertical-align:middle">'
                 html += '<div class="input-group mb-2 mb-sm-0 " style="display:flex">'
                 html += '$ <div class="total">0.00</div> '
@@ -315,26 +322,32 @@
             }
             
             $("#add_row").click(function() {
-                var idinventario_mercaderia = $('#idinventario_mercaderia').val();
-                var datosmercaderia = $('#idinventario_mercaderia option:selected').data('json');
+                if($('#idcliente').val()!='0'){
+                    var idinventario_mercaderia = $('#idinventario_mercaderia').val();
+                    var datosmercaderia = $('#idinventario_mercaderia option:selected').data('json');
 
-                if (typeof datosmercaderia != 'undefined') {
-                    if(!existe_mercaderia(idinventario_mercaderia)){
-                        var serie = datosmercaderia.json.serie;
-                        var garantia = datosmercaderia.json.garantia_meses;
-                        var idgarantia = datosmercaderia.json.garantia_meses;
-                        if(!existe_serie(serie)){
-                            agregar(garantia, idgarantia, serie, idinventario_mercaderia, datosmercaderia, datosmercaderia.json.precio_venta);
-                            calc();
+                    if (typeof datosmercaderia != 'undefined') {
+                        if(!existe_mercaderia(idinventario_mercaderia)){
+                            var serie = datosmercaderia.json.serie;
+                            var garantia = datosmercaderia.json.garantia_meses;
+                            var idgarantia = datosmercaderia.json.garantia_meses;
+                            if(!existe_serie(serie)){
+                                agregar(garantia, idgarantia, serie, idinventario_mercaderia, datosmercaderia, datosmercaderia.json.precio_venta);
+                                calc();
+                            }else{
+                                alert('La serie ya existe');
+                            }
                         }else{
-                            alert('La serie ya existe');
+                            alert('La mercadería ya está ingresada')
                         }
                     }else{
-                        alert('La mercadería ya está ingresada')
+                        alert('Elegir una mercadería')
                     }
                 }else{
-                    alert('Elegir una mercadería')
+                    alert('Elegir un cliente');
+                    $('#modal_cliente').modal('show')
                 }
+                
 
                 
 
@@ -376,6 +389,10 @@
                     postfix: '$',
                     verticalbuttons: false
                 });
+                $("#precio_"+i_global).on('input',function(){
+                    this.value = this.value.replace(/[^0-9.]/g,'');
+                });
+                $("#precio_"+i_global).attr('maxlength', 8);
                 i_global++;
             }
 
@@ -459,50 +476,7 @@
             var idcliente_g = '';
             var fecha_g = '';
             var detalle_g = [];
-            $('#guardar_venta').click(function(){
-                idcliente_g = $('#idcliente').val();
-                fecha_g = $('#fecha').val();
-                detalle_g = [];
-                var existe = false;
-                if(idcliente_g != '0'){
-                    $('#tab_logic tbody tr').each(function(i, element) {
-                        var html = $(this).html();
-                        if (typeof ($(this).find('.serie').html()) != 'undefined') {//if (html != '') {
-                            detalle_g.push({
-                                serie: $(this).find('.serie').html(),
-                                costo: 0,
-                                precio_venta: $(this).find('.price').val(),
-                                garantia_meses: $(this).find('.garantia').val(),
-                                idinventario_mercaderia: $(this).find('.idinventario_mercaderia').val(),
-                            });
-                            existe = true;
-                        }
-                    });
-                    if(!existe){
-                        alert('Agregar por lo menos 1 producto')
-                    }else{
-                        $('#modal_pagos').modal('show');
-                    }
-                    
-                }else{
-                    alert('Agregar cliente');
-                }
-            });
-
-            var data_add_venta = function(fechai, tipo, cuotas, idcuentabancaria){
-                var data = {
-                    idcliente:idcliente_g,
-                    fecha:fecha_g,
-                    detalle: JSON.stringify(detalle_g),
-                    fechai:fechai,
-                    tipo:tipo,
-                    cuotas:cuotas,
-                    idcuentabancaria:idcuentabancaria
-                }
-                return data;
-            }
-
-            $('#guardarventa').click(function(){
+            var guardar_venta_= function(pago){
                 var fechai = $('#fechai').val();
                 var tipo = $('#tipo').val();
                 var cuotas = $('#cuotas').val();
@@ -510,9 +484,9 @@
                 if(fechai != ''){
                     if(idcuentabancaria != '0'){
                         $.ajax({
-                            url: '<?= base_url() ?>venta/crear',
+                            url: '<?= base_url() ?>venta/crearnew',
                             type: 'POST',
-                            data: data_add_venta(fechai, tipo, cuotas, idcuentabancaria),
+                            data: data_add_venta(fechai, tipo, cuotas, idcuentabancaria, pago),
                             dataType: 'JSON',
                             beforeSend: function() {
                                 $('.row').find('input, textarea, button, select').prop('disabled',
@@ -541,8 +515,68 @@
                 }else{
                     alert('Seleccionar una fecha de inicio de pagos')
                 }
+            }
+            $('#guardar_venta').click(function(){
+                idcliente_g = $('#idcliente').val();
+                fecha_g = $('#fecha').val();
+                detalle_g = [];
+                var existe = false;
+                if(fecha_g ==''){
+                    alert('Error, ingresar una fecha')
+                    return false;
+                
+                }
+                if(idcliente_g != '0'){
+                    $('#tab_logic tbody tr').each(function(i, element) {
+                        var html = $(this).html();
+                        if (typeof ($(this).find('.serie').html()) != 'undefined') {//if (html != '') {
+                            detalle_g.push({
+                                serie: $(this).find('.serie').html(),
+                                costo: 0,
+                                precio_venta: $(this).find('.price').val(),
+                                garantia_meses: $(this).find('.garantia').val(),
+                                idinventario_mercaderia: $(this).find('.idinventario_mercaderia').val(),
+                            });
+                            existe = true;
+                        }
+                    });
+                    if(!existe){
+                        alert('Agregar por lo menos 1 producto')
+                    }else{
+                        if(confirm('Realizar el pago ¿a crédito?')){
+                            $('#modal_pagos').modal('show');
+                        }else{
+                            guardar_venta_('si');
+                        }
+                    }
+                    
+                }else{
+                    alert('Agregar cliente');
+                }
+            });
+
+            var data_add_venta = function(fechai, tipo, cuotas, idcuentabancaria, pago){
+                var data = {
+                    idcliente:idcliente_g,
+                    fecha:fecha_g,
+                    detalle: JSON.stringify(detalle_g),
+                    fechai:fechai,
+                    tipo:tipo,
+                    cuotas:cuotas,
+                    idcuentabancaria:idcuentabancaria,
+                    pago:pago
+                }
+                return data;
+            }
+
+            $('#guardarventa').click(function(){
+                guardar_venta_('no');
             });
             
+            $("#tax").attr('maxlength', 3);
+            $("#tax").on('input',function(){
+                this.value = this.value.replace(/[^0-9.]/g,'');
+            });
         });
         </script>
     </div>

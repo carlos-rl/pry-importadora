@@ -67,7 +67,13 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
-
+        <script>
+            $(function(){
+                $('#field-nombre').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+                });
+            })
+        </script>
     </div>
 </body>
 

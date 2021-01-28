@@ -1,19 +1,28 @@
-      <div class="right">
-        <b>Factura.</b> {{report_nombre}}<br>
-        <b>Fecha</b> {{v_fechai}} Hasta {{v_fechaf}}<br>
-      </div>
-      
-      <div>
-        <b>Datos de la importadora</b><br>
-        {{impor_nombre}}<br>
-        {{impor_ruc}}<br>
-        {{impor_direccion}} | {{impor_telefono}}
-        
-        <!---<b>Customer</b>
-        {{ invoice.contact.name }}<br>
-        {{ invoice.contact.post_address | multi_line }}--->
-      </div>
-      
+<table style="width: 590px;">
+  <tr>
+    <td width="40%">
+      <img src="{{imagen}}" width="220" class="imagen" alt=""><br>
+    </td>
+    <td width="60%">
+      <b>Datos de la importadora</b><br>
+      {{impor_nombre}}<br>
+      {{impor_ruc}}<br>
+      {{impor_direccion}} | {{impor_telefono}}
+      <b>Factura.</b> {{report_nombre}}<br>
+    </td>
+  </tr>
+</table>
+<div class="right"><br>
+  
+</div>
+
+<div>
+  
+  <!---<b>Customer</b>
+  {{ invoice.contact.name }}<br>
+  {{ invoice.contact.post_address | multi_line }}--->
+</div>
+<br>
       <h1>Informe de cuentas por pagar</h1>
       
       <table>

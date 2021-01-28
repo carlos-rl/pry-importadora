@@ -61,6 +61,14 @@
                     postfix: '$',
                     verticalbuttons: false
                 });
+                $('#field-valor').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9.]/g,'');
+                });
+                $('#field-valor').attr('maxlength', 8);
+                $('#field-numtransaccion').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9]/g,'');
+                });
+                $('#field-numtransaccion').attr('maxlength', 20);
             })
         </script>
 

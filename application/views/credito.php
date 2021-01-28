@@ -71,7 +71,13 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
-
+        <script>
+            $(function(){
+                $('.filter-row > td:nth-child(6), .filter-row > td:nth-child(5)').remove();
+                $('.filter-row > td:nth-child(4) > input:nth-child(1)').remove();
+                $('.filter-row > td:nth-child(4)').attr('colspan',3);
+            });
+        </script>
     </div>
 </body>
 

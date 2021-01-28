@@ -77,7 +77,7 @@ class Ctaporpagar extends CI_Controller {
     }
 
     function _callback_dollar($value, $row){
-        return "<i class='fa fa-dollar'></i> $value";
+        return "<i class='fa fa-dollar'></i> ".round($value, 2);
     }
 
     public function pagos($id=''){
@@ -138,7 +138,7 @@ class Ctaporpagar extends CI_Controller {
             'nombre' => '',
             'compras' => $this->Data->comprasinforme_ctaporpagar(),
             'data_accessos' => $accesos,
-            'subtitle' => 'Buscar por rango o por Número de compra',
+            'subtitle' => 'Buscar por rango o por proveedor',
             'fecha' => $fecha
         ));
     }
@@ -148,7 +148,7 @@ class Ctaporpagar extends CI_Controller {
             $post = (object) $_POST;
             try {
                 echo '{"lista":'.json_encode(
-                                    $this->Data->listarpagodeuda_informe($post->idcompra, $post->fechai, $post->fechaf)
+                                    $this->Data->listarpagodeuda_informe($post->idproveedor, $post->fechai, $post->fechaf)
                                 ).'}';
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
@@ -163,7 +163,7 @@ class Ctaporpagar extends CI_Controller {
             try {
                 require_once(APPPATH . '/libraries/mpdfnew/vendor/autoload.php');
                 $post = (object) $_GET;
-                $dat = $this->Data->listarpagodeuda_informe($post->idcompra, $post->fechai, $post->fechaf);
+                $dat = $this->Data->listarpagodeuda_informe($post->idproveedor, $post->fechai, $post->fechaf);
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
                 $mpdf->writeHTML(file_get_contents(base_url() . 'static/html/style.css'), \Mpdf\HTMLParserMode::HEADER_CSS);
                 date_default_timezone_set('America/Guayaquil');
@@ -174,6 +174,7 @@ class Ctaporpagar extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -205,14 +206,14 @@ class Ctaporpagar extends CI_Controller {
                 endforeach;
                 if(count($dat)==0){
 					$htmlTable .= '<tr>';
-                    $htmlTable .= '<td colspan="10" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
+                    $htmlTable .= '<td colspan="8" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
                     $htmlTable .= '</tr>';
                 }
                 $htmlPage = str_ireplace('{{table_row}}', $htmlTable, $htmlPage);
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_' . $fecha . '.pdf', 'D');
+                $mpdf->Output('Informe de cuentas por pagar' . $fecha . '.pdf', 'D');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

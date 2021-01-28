@@ -39,6 +39,8 @@
         font-weight: bold;
     }
     </style>
+
+		<link rel="stylesheet" href="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css">
 </head>
 
 <body>
@@ -74,7 +76,15 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
-
+		<!-- bootstrap time picker -->
+		<script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>static/moment/locale/es.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script>
+            $(function(){
+                $('input[name="fecha"]').remove()
+            })
+        </script>
     </div>
 </body>
 

@@ -451,7 +451,6 @@
             datagrid_object.search_timer = setTimeout(function () {
                 datagrid_object.gcrud_container.find('.page-number-hidden').val('1');
                 datagrid_object.SearchAndOrderingTrigger();
-
             }, timer_timeout);
         });
     };

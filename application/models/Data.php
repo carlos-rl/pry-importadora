@@ -766,11 +766,12 @@ class Data extends CI_Model {
 
     public function ventasinforme() {
         try {
-            $this->db->select('v.idventa, v.fecha, count(*) as total');
+            $this->db->select('c.idcliente, v.fecha, c.nombres, c.apellidos, c.cedula,  count(*) as total');
             $this->db->from('venta_mercaderia vd');
             $this->db->join('venta v', 'v.idventa = vd.idventa');
-			$this->db->group_by(array('vd.idventa'));
-			$this->db->order_by('v.idventa asc');
+            $this->db->join('cliente c', 'c.idcliente = v.idcliente');
+			$this->db->group_by(array('v.idcliente'));
+			$this->db->order_by('c.cedula asc');
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -778,7 +779,7 @@ class Data extends CI_Model {
         }
     }
 
-    public function venta_inventario_informe($idventa, $fechai, $fechaf) {
+    public function venta_inventario_informe($idcliente, $fechai, $fechaf) {
         try {   
             $this->db->select('vd.idventa_mercaderia, vd.precio, i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
             ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono');
@@ -791,8 +792,8 @@ class Data extends CI_Model {
             if($fechai != ''){
                 $this->db->where('(c.fecha>="' . $fechai . '" and c.fecha<="' . $fechaf . '")');
             }
-            if($idventa != '0'){
-                $this->db->where('c.idventa',$idventa);
+            if($idcliente != '0'){
+                $this->db->where('c.idcliente',$idcliente);
             }
             
 			$this->db->order_by('c.fecha asc');
@@ -865,7 +866,7 @@ class Data extends CI_Model {
         }
     }
 
-    public function compra_inventario_informe($idcompra, $fechai, $fechaf) {
+    public function compra_inventario_informe($idproveedor, $fechai, $fechaf) {
         try {   
             $this->db->select('i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
             ,c.idcompra, c.fecha, c.idproveedor, p.nombres, p.ruc, p.direccion, p.telefono');
@@ -877,8 +878,8 @@ class Data extends CI_Model {
             if($fechai != ''){
                 $this->db->where('(c.fecha>="' . $fechai . '" and c.fecha<="' . $fechaf . '")');
             }
-            if($idcompra != '0'){
-                $this->db->where('c.idcompra',$idcompra);
+            if($idproveedor != '0'){
+                $this->db->where('p.idproveedor',$idproveedor);
             }
 			$this->db->order_by('m.modelo asc');
             $resultado = $this->db->get();
@@ -890,11 +891,12 @@ class Data extends CI_Model {
 
     public function comprasinforme() {
         try {
-            $this->db->select('v.idcompra, v.fecha, count(*) as total');
+            $this->db->select('p.idproveedor, p.nombres, p.ruc, v.fecha, count(*) as total');
             $this->db->from('inventario_mercaderia vd');
             $this->db->join('compra v', 'v.idcompra = vd.idcompra');
-			$this->db->group_by(array('vd.idcompra'));
-			$this->db->order_by('v.idcompra asc');
+            $this->db->join('proveedor p', 'p.idproveedor = v.idproveedor');
+			$this->db->group_by(array('v.idproveedor'));
+			$this->db->order_by('p.ruc asc');
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -956,12 +958,13 @@ class Data extends CI_Model {
         }
     }
 
-    public function cliente_informe($fechai, $fechaf) {
+    public function cliente_informe($idcliente) {
         try {   
             $this->db->select('*');
             $this->db->from('cliente c');
-            if($fechai != ''){
-                $this->db->where('(c.fecha>="' . $fechai . '" and c.fecha<="' . $fechaf . '")');
+            if($idcliente != '0'){
+                //$this->db->where('(c.fecha>="' . $fechai . '" and c.fecha<="' . $fechaf . '")');
+                $this->db->where('c.idcliente', $idcliente);
             }
             $this->db->where('c.idcliente <> 1');
 			$this->db->order_by('c.nombres asc');
@@ -974,11 +977,12 @@ class Data extends CI_Model {
 
     public function comprasinforme_ctaporpagar() {
         try {
-            $this->db->select('cp.idcompra, count(*) as total');
+            $this->db->select('p.ruc, p.nombres, p.idproveedor, count(*) as total');
             $this->db->from('pagodeuda pd');
             $this->db->join('credito_pagar cp', 'cp.idcredito_pagar = pd.idcredito_pagar');
-			$this->db->group_by(array('cp.idcompra'));
-			$this->db->order_by('cp.idcompra asc');
+            $this->db->join('proveedor p', 'p.idproveedor = cp.idproveedor');
+			$this->db->group_by(array('cp.idproveedor'));
+			$this->db->order_by('p.ruc asc');
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -986,7 +990,7 @@ class Data extends CI_Model {
         }
     }
 
-    public function listarpagodeuda_informe($idcompra, $fechai, $fechaf) {
+    public function listarpagodeuda_informe($idproveedor, $fechai, $fechaf) {
         try {
             $this->db->select('c.idcompra, pd.idpagodeuda, pd.fecha, pd.numcheque, pd.valorcheque, pd.estado, cb.numero, cb.tipo, b.nombre, p.nombres, p.ruc');
             $this->db->from('pagodeuda pd');
@@ -998,8 +1002,8 @@ class Data extends CI_Model {
             if($fechai != ''){
                 $this->db->where('(c.fecha>="' . $fechai . '" and c.fecha<="' . $fechaf . '")');
             }
-            if($idcompra != '0'){
-                $this->db->where('c.idcompra',$idcompra);
+            if($idproveedor != '0'){
+                $this->db->where('c.idproveedor',$idproveedor);
             }
 			$this->db->order_by('pd.fecha asc');
             $resultado = $this->db->get();
@@ -1011,11 +1015,13 @@ class Data extends CI_Model {
 
     public function informe_credito() {
         try {
-            $this->db->select('c.idventa, count(*) as total');
+            $this->db->select('cl.idcliente,cl.nombres,cl.apellidos,cl.cedula, count(*) as total');
             $this->db->from('amortizacion_cuotas ac');
             $this->db->join('credito c', 'c.idcredito = ac.idcredito');
-			$this->db->group_by(array('c.idventa'));
-			$this->db->order_by('c.idventa asc');
+            $this->db->join('venta v', 'v.idventa = c.idventa');
+            $this->db->join('cliente cl', 'cl.idcliente = v.idcliente');
+			$this->db->group_by(array('v.idcliente'));
+			$this->db->order_by('cl.cedula asc');
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -1024,7 +1030,7 @@ class Data extends CI_Model {
     }
     
 
-    public function creditopagodeuda_venta($idventa, $fechai, $fechaf) {
+    public function creditopagodeuda_venta($idcliente, $fechai, $fechaf) {
         try {
             $this->db->select('c.idventa, cl.nombres, cl.apellidos, cl.cedula, pd.idcredito, pd.idamortizacion_cuotas, pd.fechapagar, pd.fechapagado, pd.valorcuota, pd.valorabonado, pd.recargo, pd.estado, pd.saldo');
             $this->db->from('amortizacion_cuotas pd');
@@ -1034,8 +1040,8 @@ class Data extends CI_Model {
             if($fechai != ''){
                 $this->db->where('(pd.fechapagar>="' . $fechai . '" and pd.fechapagar<="' . $fechaf . '")');
             }
-            if($idventa != '0'){
-                $this->db->where('c.idventa',$idventa);
+            if($idcliente != '0'){
+                $this->db->where('c.idcliente',$idcliente);
             }
 			$this->db->order_by('pd.fechapagar asc');
             $resultado = $this->db->get();
@@ -1059,6 +1065,20 @@ class Data extends CI_Model {
 			$this->db->order_by('d.fecha asc');
             $resultado = $this->db->get();
             return $resultado->result();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function escredito($idventa) {
+        try {
+            $this->db->select('count(*) as total');
+            $this->db->from('amortizacion_cuotas a');
+            $this->db->join('credito c', 'c.idcredito = a.idcredito');
+            $this->db->where('c.idventa',$idventa);
+            $resultado = $this->db->get();
+            $resultado = isset($resultado->row()->total)?$resultado->row()->total:0;
+            return  $resultado > 2?'Crédito - # pagos: '.$resultado:'Al contado';
         } catch (Exception $ex) {
             return $ex->getMessage();
         }

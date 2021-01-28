@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Listado de ventas por fecha o por número de venta
+                                        Informe de ventas
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -145,12 +145,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Por N° de Venta</label>
+                                        <label class="col-sm-3 control-label">Por clientes</label>
                                         <div class="col-sm-9">
-                                            <select name="idventa" id="idventa" class="form-control">
-                                                <option value="0">Todas las venta</option>
+                                            <select name="idcliente" id="idcliente" class="form-control">
+                                                <option value="0">Todos los clientes</option>
                                                 <?php foreach ($ventas as $key => $x) { ?>
-                                                    <option value="<?= $x->idventa ?>">V-<?= str_pad($x->idventa, 8, "0", STR_PAD_LEFT) ?> (<?= $x->total ?>)</option>
+                                                    <option value="<?= $x->idcliente ?>">CI- <?= $x->cedula ?>, <?= $x->nombres ?> <?= $x->apellidos ?> (<?= $x->total ?>)</option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -172,7 +172,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -180,10 +179,11 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
-            var idventa = 0;
+            var idcliente = 0;
             var fechai = '';
             var fechaf = '';
             var tablaDatos = function(btn){
@@ -193,7 +193,7 @@
                     data: {
                         'fechaf': fechaf,
                         'fechai':fechai,
-                        'idventa': $('#idventa').val()
+                        'idcliente': $('#idcliente').val()
                         },
                     dataType: 'JSON',
                     beforeSend: function () {
@@ -270,8 +270,13 @@
                 $(this).val('');
             });
             $('#exportar').click(function(){
-                window.location= '<?= base_url() ?>venta/pdf?idventa='+$('#idventa').val()+'&fechai='+fechai+'&fechaf='+fechaf;
+                window.location= '<?= base_url() ?>venta/pdf?idcliente='+$('#idcliente').val()+'&fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>

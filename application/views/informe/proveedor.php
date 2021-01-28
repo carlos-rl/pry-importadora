@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Listado de proveedores por rango de fecha
+                                        Informe de proveedores
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -91,19 +91,18 @@
                                                     <th>Nombre</th>
                                                     <th>RUC</th>
                                                     <th>Teléfono</th>
-                                                    <th class="text-center">Costo</th>
-                                                    <th class="text-center">Precio al público</th>
+                                                    <th class="text-center">Costo de sus compras</th>
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_">
                                                 <tr id='addr0'>
-                                                    <td colspan="7" class="text-center">Ningún dato en la tabla</td>
+                                                    <td colspan="6" class="text-center">Ningún dato en la tabla</td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr class="font-bold font-black">
-                                                    <td colspan="6" class="text-right">TOTAL:</td>
+                                                    <td colspan="5" class="text-right">TOTAL:</td>
                                                     <td class="font-blue font-size-23" id="total_amount">
                                                         $0.00
                                                     </td>
@@ -159,7 +158,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -167,6 +165,7 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
@@ -202,7 +201,6 @@
                         html +='<td class="">'+(d.ruc).toUpperCase()+'</td>';
                         html +='<td class="">'+(d.telefono).toUpperCase()+'</td>';
                         html +='<td class="">$ '+(d.costo).toUpperCase()+'</td>';
-                        html +='<td class="">$ '+(d.pvp).toUpperCase()+'</td>';
                         html +='<td class="">$ '+(d.costo).toUpperCase()+'</td>';
                         html +='</tr>';
                         $("#tbody_").append(html);
@@ -256,6 +254,11 @@
             $('#exportar').click(function(){
                 window.location= '<?= base_url() ?>proveedor/pdf?fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>

@@ -48,7 +48,9 @@
                 <div class="span6">
                     <div class="pull-right">
                         <a href="<?= base_url('menu/checkout') ?>"><span class="btn btn-mini btn-primary"><i
-                                    class="icon-shopping-cart icon-white"></i> [ <?= ($this->session->userdata('carrito')==null?0:count($this->session->userdata('carrito'))) ?> ] Producto(s) añadido </span> </a>
+                                    class="icon-shopping-cart icon-white"></i> [
+                                <?= ($this->session->userdata('carrito')==null?0:count($this->session->userdata('carrito'))) ?>
+                                ] Producto(s) añadido </span> </a>
                     </div>
                 </div>
             </div>
@@ -99,31 +101,94 @@
             </div>
         </div>
     </div>
+    <style>
+        #logo-home div div div {
+            text-align:center
+        }
+    </style>
+    <section id="logo-home">
+        <div class="container">
+            <div class="row">
+                <div class=" text-center">
+                <img style="width:20%" src="<?= base_url() ?>static/banner/logojhael.png" alt="" />
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Header End====================================================================== -->
     <div id="carouselBlk">
         <div id="myCarousel" class="carousel slide">
             <div class="carousel-inner">
                 <div class="item active">
                     <div class="container">
-                        <img style="width:100%"
-                            src="<?= base_url() ?>static/shop/themes/images/carousel/carrousel-2.jpg" alt="" />
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-3-new.jpg" alt="" />
                         <div class="carousel-caption">
                             <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
-                                gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <p></p>
                         </div>
                     </div>
                 </div>
                 <div class="item">
                     <div class="container">
-                        <img style="width:100%"
-                            src="<?= base_url() ?>static/shop/themes/images/carousel/carrousel-3.jpg" alt="" />
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-5-new.jpg" alt="" />
                         <div class="carousel-caption">
                             <h4>Second Thumbnail label</h4>
-                            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
-                                gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <p></p>
                         </div>
-
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-7-new.jpg" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-10-new.jpg" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-19-new.jpg" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-20-new.jpg" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/carrousel-21-new.jpg" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <img style="width:100%" src="<?= base_url() ?>static/banner/kitton-img-5.png" alt="" />
+                        <div class="carousel-caption">
+                            <h4>Second Thumbnail label</h4>
+                            <p></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -137,12 +202,14 @@
                 <!-- Sidebar ================================================== -->
                 <div id="sidebar" class="span3">
                     <?php if($this->session->userdata('carrito')!=null){ ?>
-                        <div class="well well-small">
-                                <img src="<?= base_url() ?>static/shop/themes/images/ico-cart.png" alt="producto(s) añadidos"><?= count($this->session->userdata('carrito')) ?> Item(s)  
-                                <a href="<?= base_url('menu/checkout') ?>" class="btn btn-warning pull-right">Comprar <i class="icon-shopping-cart"></i></a>
-                        </div>
+                    <div class="well well-small">
+                        <img src="<?= base_url() ?>static/shop/themes/images/ico-cart.png"
+                            alt="producto(s) añadidos"><?= count($this->session->userdata('carrito')) ?> Item(s)
+                        <a href="<?= base_url('menu/checkout') ?>" class="btn btn-warning pull-right">Comprar <i
+                                class="icon-shopping-cart"></i></a>
+                    </div>
                     <?php } ?>
-                
+
                     <ul id="sideManu" class="nav nav-tabs nav-stacked">
                         <li class="subMenu open"><a> Filtrado por marcas</a>
                             <ul>
@@ -154,7 +221,97 @@
                         </li>
                     </ul>
                     <br />
-
+                    <div id="myCarousel_2" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-4-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-1-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-2-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-6-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-8-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-9-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-11-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-12-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-13-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-14-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-15-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-16-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-17-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="">
+                                    <img style="width:100%" src="<?= base_url() ?>static/banner/slider/carrousel-18-new.jpg"
+                                        alt="" />
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <a class="left carousel-control" href="#myCarousel_2" data-slide="prev">&lsaquo;</a>
+                        <a class="right carousel-control" href="#myCarousel_2" data-slide="next">&rsaquo;</a>
+                    </div>
                 </div>
                 <!-- Sidebar end=============================================== -->
                 <div class="span9">
@@ -176,23 +333,24 @@
                                         </strong>
                                     </p>
                                     <h4 style="text-align:center">
-                                    
+
                                         <?php if($this->session->userdata('carrito')!=null){ ?>
                                         <?php if (existeCarrito($x->idinventario_mercaderia)=='1') { ?>
-                                            <a class="btn btn-success disabled">Añadido al
+                                        <a class="btn btn-success disabled">Añadido al
                                             carrito <i class="icon-shopping-cart"></i></a>
-                                            <a href="<?= base_url('menu/delete/'.$x->idinventario_mercaderia) ?>" class="btn btn-danger"><i class="fa fa-remove"></i></a>
+                                        <a href="<?= base_url('menu/delete/'.$x->idinventario_mercaderia) ?>"
+                                            class="btn btn-danger"><i class="fa fa-remove"></i></a>
                                         <?php }else{ ?>
-                                            <a class="btn btn-primary"
+                                        <a class="btn btn-primary"
                                             href="<?= base_url('menu/add/'.$x->idinventario_mercaderia) ?>">Agregar al
                                             carrito <i class="icon-shopping-cart"></i></a>
                                         <?php } ?>
                                         <?php } else{ ?>
-                                            <a class="btn btn-primary"
+                                        <a class="btn btn-primary"
                                             href="<?= base_url('menu/add/'.$x->idinventario_mercaderia) ?>">Agregar al
                                             carrito <i class="icon-shopping-cart"></i></a>
                                         <?php } ?>
-                                        
+
                                     </h4>
                                 </div>
                             </div>
@@ -202,28 +360,114 @@
                     </ul>
 
                 </div>
+                <style>
+                #services {
+                    margin-left: auto;
+                    margin-right: auto;
+                    text-align: center;
+                    background-color: #f4f4f4;
+                }
+
+                #contacto,
+                #services .container {
+                    padding-bottom: 60px;
+                    padding-top: 40px;
+
+                }
+
+                #footerSection {
+                    margin-top: 0px;
+                }
+                .text-center{
+                    text-align: center;
+                }
+                </style>
+
             </div>
         </div>
+        <section id="services">
+            <div class="container">
+                <div class="row">
+                    <div class=" text-center">
+                        <h2 class="section-heading text-uppercase">Principios</h2>
+                        <!--<h3 class="section-subheading text-muted">Nuestros principios</h3>-->
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="span4">
+                        <span class="fa-stack fa-4x">
+                            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                            <i class="fa fa-free-code-camp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="service-heading">VISIÓN </h4>
+                        <p class="text-muted">Somos una empresa que brinda excelentes servicios a la comunidad
+                            ofreciendo para ello comodidad al cliente con los mejores precios accesibles del mercado,
+                            buscando satisfacer su necesidad con productos de calidad y útil a las familias, amigos y
+                            personas en general.</p>
+                    </div>
+                    <div class="span4">
+                        <span class="fa-stack fa-4x">
+                            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                            <i class="fa fa-american-sign-language-interpreting fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="service-heading">MISIÓN</h4>
+                        <p class="text-muted">Ser reconocidos al nivel Nacional en la comercialización de
+                            electrodomésticos, muebles, electrónicos y productos para la agricultura, para emprender
+                            pequeños negocios comerciales como para pequeñas industrias, con productos de excelente
+                            calidad con un alto nivel de servicio, comodidad y sobre todo el buen trato a los
+                            trabajadores como a nuestros clientes.</p>
+                    </div>
+                    <div class="span4">
+                        <span class="fa-stack fa-4x">
+                            <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                            <i class="fa fa-certificate fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <h4 class="service-heading">NUESTROS VALORES</h4>
+                        <p class="text-muted">
+                        <ul class="list-group">
+                            <li class="list-group-item"> Somos una empresa responsabilidad</li>
+                            <li class="list-group-item"> Mostramos honestidad e integridad</li>
+                            <li class="list-group-item"> Trabajamos en equipó</li>
+                            <li class="list-group-item"> Damos cumplimiento a las leyes</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contacto">
+            <div class="container">
+                <div class="row">
+                    <div class=" text-center">
+                        <h2 class="section-heading text-uppercase">Contacto</h2>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="span12">
+                        <p class="text-muted">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d996.6196093314122!2d-79.3053427!3d-2.3445365!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d2abf07f2921d7%3A0x52976eb412a4fbf5!2sCreditos%20Jha-el!5e0!3m2!1ses-419!2sec!4v1611598302976!5m2!1ses-419!2sec"
+                                width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen=""
+                                aria-hidden="false" tabindex="0"></iframe>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
     <!-- Footer ================================================================== -->
     <div id="footerSection">
         <div class="container">
             <div class="row">
-                <div class="span3">
-                    <h5>Dirección</h5>
-                    <label for=""><?= $idimportadora->direccion ?></label>
-                </div>
-                <div class="span3">
-                    <h5>Teléfono</h5>
-                    <label for=""><?= $idimportadora->telefono ?></label>
-                </div>
-                <div class="span3">
-                    <h5>Correo</h5>
-                    <label for=""><?= $idimportadora->correo ?></label>
+                <div class="span6">
+                    <h5>Contacto</h5>
+                    Dirección: <i class="fa fa-map-marker"></i> <?= $idimportadora->direccion ?><br>
+                    Correo: <i class="fa fa-envelope"></i> <?= $idimportadora->correo ?><br>
+                    Whatsapp: <i class="fa fa-whatsapp"></i> 0991043411<br>
                 </div>
                 <div id="socialMedia" class="span3 pull-right">
                     <h5>Redes sociales </h5>
-                    <a href="#"><i class="fa fa-facebook-f fa-2x"></i></a>
+                    <a href="https://www.facebook.com/comercialjhael/"><i class="fa fa-facebook-f fa-2x"></i></a>
                 </div>
             </div>
         </div><!-- Container End -->

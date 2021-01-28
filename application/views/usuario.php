@@ -47,7 +47,19 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
-
+        <script>
+            $(function(){
+                $('.filter-row > td:nth-child(4) > input:nth-child(1), #admin').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+                });
+                $('#usuario').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ@.0-9\s]/g,'');
+                });
+                
+                $('.filter-row > td:nth-child(7), .filter-row > td:nth-child(6) > input').remove();
+                $('.filter-row > td:nth-child(6)').attr('colspan','2');
+            })
+        </script>
     </div>
 </body>
 

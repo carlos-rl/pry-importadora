@@ -71,8 +71,12 @@ class Proveedor extends CI_Controller {
 
 
 
-        $crud->set_rules('correo', 'Correo del proveedor', 'trim|valid_email|max_length[100]|required');
-        $crud->set_rules('nombres', 'Nombres', 'regex_match[/^[a-z-A-Z ,.]*$/i]|required' );
+        $crud->set_rules('correo', 'Correo del proveedor', 'trim|valid_email|max_length[100]');
+        //$crud->set_rules('nombres', 'Nombres', 'regex_match[/^[a-z-A-Z ,.]*$/i]|required' );
+
+        $crud->callback_field('correo',function ($value = '', $primary_key = null) {
+            return '<input type="email" maxlength="70" value="'.$value.'" class="form-control" id="correo" name="correo" title="Introduzca una dirección de correo válida" class="form-control" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" >';
+        });
 
         $crud->callback_column('nombres',array($this,'_callback_nombres'));
         $crud->callback_column('telefono',array($this,'_callback_telefono'));
@@ -191,6 +195,7 @@ class Proveedor extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -214,21 +219,20 @@ class Proveedor extends CI_Controller {
                     $htmlTable .= '<td class="tableitem">' . $x->nombres .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->ruc .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->telefono .'</td>';
-                    $htmlTable .= '<td class="tableitem">$ ' . $x->costo .'</td>';
-                    $htmlTable .= '<td class="tableitem">$ ' . $x->pvp .'</td>';
-                    $htmlTable .= '<td class="tableitem">$ ' . $x->costo .'</td>';
+                    $htmlTable .= '<td class="tableitem">$ ' . round($x->costo, 2) .'</td>';
+                    $htmlTable .= '<td class="tableitem">$ ' . round($x->costo, 2) .'</td>';
                     $htmlTable .= '</tr>';
                 endforeach;
                 if(count($dat)==0){
 					$htmlTable .= '<tr>';
-                    $htmlTable .= '<td colspan="7" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
+                    $htmlTable .= '<td colspan="6" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
                     $htmlTable .= '</tr>';
                 }
                 $htmlPage = str_ireplace('{{table_row}}', $htmlTable, $htmlPage);
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_' . $fecha . '.pdf', 'I');
+                $mpdf->Output('Informe de proveedores' . $fecha . '.pdf', 'D');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

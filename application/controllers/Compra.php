@@ -97,6 +97,66 @@ class Compra extends CI_Controller {
         }
     }
 
+    public function crearcompra() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = (object) $_POST;
+            $detalle = json_decode($_POST['detalle']);
+            $data = array(
+                'idproveedor' => $post->idproveedor,
+                'fecha' => $post->fecha
+            );
+            $idcompra = $this->Data->crearVC($data);
+
+            $sql = 'INSERT INTO inventario_mercaderia(idcompra, serie, costo, precio_venta, garantia_meses, idmercaderia) values';
+            $total = 0;
+            for ($i = 0; $i < count($detalle); $i++) {
+                $ins = $detalle[$i];
+                $sql .= '(' . $idcompra . ', "' . $ins->serie. '", ' . $ins->costo . ', ' . $ins->precio_venta . ', ' . $ins->garantia_meses . ', ' . $ins->idmercaderia . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+                $total = $total + $ins->costo;
+            }
+            $this->Data->sql($sql);
+            $this->creditoCompra($idcompra, $post->idproveedor, $post->fechai, $post->cuotas, $total, $post->tipo, $post->idcuentabancaria,$post->pagado);
+            
+            echo '{"resp" : true, "idcompra":'.$idcompra.'}';
+        }
+    }
+
+    private function creditoCompra($idcompra, $idproveedor, $fechai, $num_pago, $total, $tipo, $idcuentabancaria, $pagado) {
+        $fecha_actual = $fechai;
+        $fechaf  = '';
+        $tipo = ($tipo == '1'?'+ 1 month':'+ 1 week');
+        for ($i=0; $i < $num_pago ; $i++) {
+            $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
+            if($num_pago == ($i+1)){
+                $fechaf = $fecha_actual;
+            }
+        }
+        $fecha_actual = $fechai;
+        $sql = 'INSERT INTO pagodeuda(fecha, valorcheque, idcredito_pagar, idcuentabancaria) values';
+        $varlop = $total / $num_pago;
+
+        /**credito_pagar */
+        $this->Data->tabla = 'credito_pagar';
+        $this->Data->id = 'idcredito_pagar';
+        $idcredito_pagar = $this->Data->crearVC(
+            array(
+                'deudainicial' => $total,
+                'saldo' => $total,
+                'estado' => ($pagado=='no'?0:1),
+                'idcompra' => $idcompra,
+                'idproveedor' => $idproveedor
+            )
+        );
+
+        for ($i = 0; $i < $num_pago; $i++) {
+            $estado = 0;
+            $sql .= '("' . $fecha_actual . '", ' . $varlop. ', "' . $idcredito_pagar. '", '.$idcuentabancaria.')' . ((($num_pago) == $i + 1) ? ' ' : ' ,');
+            $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
+        }
+        $this->Data->sql($sql);
+        return true;
+    }
+
     private function credito($idcompra, $idproveedor, $fechai, $num_pago, $total, $tipo, $idcuentabancaria) {
         $fecha_actual = $fechai;
         $fechaf  = '';
@@ -164,7 +224,7 @@ class Compra extends CI_Controller {
             'nombre' => '',
             'compras' => $this->Data->comprasinforme(),
             'data_accessos' => $accesos,
-            'subtitle' => 'Buscar por rango o por Número de compra',
+            'subtitle' => 'Buscar por rango o por proveedor',
             'fecha' => $fecha
         ));
     }
@@ -174,7 +234,7 @@ class Compra extends CI_Controller {
             $post = (object) $_POST;
             try {
                 echo '{"lista":'.json_encode(
-                                    $this->Data->compra_inventario_informe($post->idcompra, $post->fechai, $post->fechaf)
+                                    $this->Data->compra_inventario_informe($post->idproveedor, $post->fechai, $post->fechaf)
                                 ).'}';
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
@@ -189,7 +249,7 @@ class Compra extends CI_Controller {
             try {
                 require_once(APPPATH . '/libraries/mpdfnew/vendor/autoload.php');
                 $post = (object) $_GET;
-                $dat = $this->Data->compra_inventario_informe($post->idcompra, $post->fechai, $post->fechaf);
+                $dat = $this->Data->compra_inventario_informe($post->idproveedor, $post->fechai, $post->fechaf);
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
                 $mpdf->writeHTML(file_get_contents(base_url() . 'static/html/style.css'), \Mpdf\HTMLParserMode::HEADER_CSS);
                 date_default_timezone_set('America/Guayaquil');
@@ -200,6 +260,7 @@ class Compra extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -240,7 +301,7 @@ class Compra extends CI_Controller {
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_' . $fecha . '.pdf', 'D');
+                $mpdf->Output('Informe de compras' . $fecha . '.pdf', 'D');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

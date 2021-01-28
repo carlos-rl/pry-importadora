@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Informe de devoluciones de ventas o compras
+                                        Informe de devolución
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -160,7 +160,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -168,6 +167,7 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
@@ -256,6 +256,11 @@
             $('#exportar').click(function(){
                 window.location= '<?= base_url() ?>devolverventa/pdf?tipo='+$('#tipo').val()+'&fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>

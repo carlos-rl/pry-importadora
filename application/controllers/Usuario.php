@@ -87,8 +87,9 @@ class Usuario extends CI_Controller {
         $crud->callback_edit_field('contrasenia',array($this,'decrypt_password_callback'));
 
 
-
-        $crud->set_rules('admin', 'Nombres', 'regex_match[/^[a-z-A-Z ,.]*$/i]' );
+        $crud->callback_field('admin',function ($value = '', $primary_key = null) {
+            return '<input type="text" maxlength="70" value="'.$value.'" class="form-control" required id="admin" name="admin">';
+        });
 
         $crud->callback_column('usuario',array($this,'_callback_correo'));
         
@@ -99,6 +100,15 @@ class Usuario extends CI_Controller {
         if($crud->getState() === 'update_validation'){
             $crud->set_rules('usuario', 'Correo del usuario', 'trim|valid_email|min_length[8]|max_length[100]|callback_validar_edit_nombre|required');
         }
+
+        
+        $crud->callback_field('usuario',function ($value = '', $primary_key = null) {
+            return '<input id="usuario" type="email" maxlength="50" value="'.$value.'" title="Introduzca una dirección de correo válida" class="form-control" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required name="usuario">';
+        });
+
+        $crud->callback_field('contrasenia',function ($value = '', $primary_key = null) {
+            return '<input id="contrasenia" type="password" maxlength="50" value="'.$value.'" title="Ingresar su contraseña" class="form-control" required name="contrasenia">';
+        });
 
         $this->_example_output($crud);
     }

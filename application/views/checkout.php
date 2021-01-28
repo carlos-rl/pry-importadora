@@ -115,7 +115,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="email">Teléfono <span class="text-muted">(Optional)</span></label>
-                        <input type="number" class="form-control" name="telefono" id="telefono" value="" placeholder="+593 844556669">
+                        <input type="number" maxlength="10" class="form-control" name="telefono" id="telefono" value="" placeholder="+593 844556669">
                         <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                         </div>
@@ -150,6 +150,27 @@
     <!-- Bootstrap core JavaScript -->
     <script src="<?= base_url() ?>static/css_inicio/vendor/jquery/jquery.min.js"></script>
     <script src="<?= base_url() ?>static/css_inicio/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            var nummax = '';
+            $('#telefono').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9]/g,'');
+                nombre = this.value;
+                if (nombre.length<11){
+                    nummax = nombre;
+                }
+                else {
+                    this.value = nummax;
+                }
+            });
+            $('#nombres').on('input',function(){ 
+                this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+            });
+            $('#direccion').on('input',function(){ 
+                this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+            });
+        })
+    </script>
 </body>
 
 </html>

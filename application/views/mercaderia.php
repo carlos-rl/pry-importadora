@@ -54,6 +54,9 @@
         </script>
         <script>
         $(function() {
+            $('#field-modelo').on('input',function(){ 
+                    this.value = this.value.replace(/[^a-zA-Z0-9\s]/g,'');
+            });
             $('.table.table-bordered.grocery-crud-table.table-hover tbody').on('click', 'button[rel="catalogo"]', function() {
                 var id = $(this).val();
                 var btn = $(this);

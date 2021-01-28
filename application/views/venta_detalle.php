@@ -79,7 +79,8 @@
                                     <li style="display: flex;"><b>Fecha:</b> <span><?= $idcliente->fecha ?></span></li>
                                     <li>
                                     <?php if($idcliente->estado_v == '1'){ ?>
-                                        <b>Estado:</b> <span class="bs-label label-success">Venta guardada</span>
+                                        <b>Estado:</b> <span class="bs-label label-success">Venta guardada</span><br><br>
+                                        <b>Pago:</b> <span class="bs-label label-default" id="tipopago_"><?= $escredito ?></span>
                                     <?php }else{ ?>
                                         <b>Estado:</b> <span class="bs-label label-warning">Venta no guardada</span> <button id="guardar_venta" title="Guardar venta" class="btn btn-success btn-xs"><i class="fa fa-check-circle"></i></button>
                                     <?php } ?>
@@ -161,6 +162,7 @@
                                     <select name="" id="tipo" class="form-control">
                                         <option value="1">Mes</option>
                                         <option value="2">Semana</option>
+                                        <option value="3">Cada 15 días</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4"><br>

@@ -63,7 +63,7 @@
                                 <address class="invoice-address">
                                 <div for="" id=""><strong>RUC: </strong> <?= $idcredito_pagar->ruc ?></div>
                                     <div for="" id=""><strong>Deuda: </strong> $ <?= $idcredito_pagar->deudainicial ?></div>
-                                    <div for="" id="telefono"><strong>Saldo: </strong> <?= $idcredito_pagar->saldo=='0'?'<label class="label label-success">Pagado</label>': '$ '.($idcredito_pagar->saldo) ?></div>
+                                    <div for="" id="telefono"><strong>Saldo: </strong> <?= $idcredito_pagar->saldo=='0'?'<label class="label label-success">Pagado</label>': '$ '.(round($idcredito_pagar->saldo, 2)) ?></div>
                                 </address>
                             </div>
                             
@@ -86,7 +86,6 @@
                                 <?php $b = 1; ?>
                                 <?php $total = 0; ?>
                                 <?php foreach ($idpagodeuda as $key => $x) { ?>
-                                    <?php $b++; ?>
                                     <tr>
                                         <td class=""><?= $b ?></td>
                                         <td class="">
@@ -105,6 +104,8 @@
                                     </tr>
                                     <?php $existe_ = true; ?>
                                     <?php $total = $total + $x->valorcheque; ?>
+                                    
+                                    <?php $b++; ?>
                                 <?php } ?>
                                 
                                 <?php if(!$existe_){ ?>
@@ -117,7 +118,7 @@
                             <tfoot>
                                 <tr class="font-bold font-black">
                                     <td colspan="6" class="text-right">TOTAL:</td>
-                                    <td class="font-blue font-size-23 text-right" id="total_amount">$<?= $total ?></td>
+                                    <td class="font-blue font-size-23 text-right" id="total_amount">$<?= round($total, 2) ?></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -127,9 +128,36 @@
                 </div>
             </div>
         </div>
+        <div id="modal_numerocheque" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <div class="row">
+                                <div class="col-md-12"><br>
+                                    <label for="">Número de cheque</label>
+                                    <input type="text" class="form-control" id="num_cheque" placeholder="Ingresar n° de cheque">
+                                </div>
+                                <div class="col-md-12">
+                                <br>
+                                <button class="btn btn-primary" id="aceptarnumero">
+                                    Aceptar
+                                </button>
+                                <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <!-- Modal -->
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         
         <script>
         $(function() {
@@ -159,11 +187,36 @@
                     location.reload();
                 });
             };
+            $('#num_cheque').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9]/g,'');
+            });
+            $('#num_cheque').attr('maxlength',9);
+            var enviar_pago = function(btn, numcheque){
+                
+            }
+            var btns_pago;
+            $('#aceptarnumero').click(function(){
+                var numcheque = $('#num_cheque').val();
+                if((numcheque.length < 10) && (numcheque.length > 4) && (isNaN(numcheque) == false)){
+                    if ((numcheque != null) && (numcheque != '')) {
+                        pagar(btns_pago.btns, {
+                            idpagodeuda:btns_pago.idpagodeuda,
+                            estado: btns_pago.estado,
+                            numcheque:numcheque
+                        }, numcheque);
+                    }else{
+                        alert('Ingresar el N° de cheque')
+                    }
+                }else{
+                    alert('El número no es el correcto, ingrese nuevamente')
+                }
+            });
             $('#body_pago').on('click', 'button[rel="pagar"]', function () {
                 var loading = '<i class="fa fa-circle-o-notch fa-spin"></i>';
                 var data = $(this).data('json'),
                         id = data.idpagodeuda;
                 var btns = $(this);
+                var numcheque = '';
                 if(data.estado == '0'){
                     pagar(btns, {
                         idpagodeuda:id,
@@ -171,16 +224,13 @@
                         numcheque:''
                     }, numcheque);
                 }else{
-                    var numcheque = prompt("Por favor ingresar el número de cheque", "");
-                    if ((numcheque != null) && (numcheque != '')) {
-                        pagar(btns, {
-                            idpagodeuda:id,
-                            estado: data.estado,
-                            numcheque:numcheque
-                        }, numcheque);
-                    }else{
-                        alert('Ingresar el N° de cheque')
-                    }
+                    btns_pago = {
+                        idpagodeuda:id,
+                        estado: data.estado,
+                        numcheque:'',
+                        btns
+                    };
+                    $('#modal_numerocheque').modal('show');
                 }
                 
             });

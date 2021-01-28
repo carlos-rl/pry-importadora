@@ -258,35 +258,40 @@ class Menu extends CI_Controller {
     }
 
     public function ordenar() {
-        if ((count($this->session->userdata('carrito')) != 0)) {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $post = (object) $_POST;
-                $cabecera = $this->session->userdata('carrito');
-                $detalle = $cabecera;
-                $data = array(
-                    'idcliente' => $this->addcliente($post),
-                    'fecha' => strftime("%Y-%m-%d"),
-                    'estado_v' => '0'
-                );
-                $this->Data->tabla = 'venta';
-                $this->Data->id = 'idventa';
-                $idventa = $this->Data->crearVC($data);
-                $sql = 'INSERT INTO venta_mercaderia(idventa, idinventario_mercaderia, precio) values';
-                $total = 0;
-                for ($i = 0; $i < count($detalle); $i++) {
-                    $ins = $detalle[$i]['data'];
-                    $sql .= '(' . $idventa . ', "' . $ins->idinventario_mercaderia. '", ' . $ins->precio_venta . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
-
+        if($this->session->userdata('carrito')){
+            if ((count($this->session->userdata('carrito')) != 0)) {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $post = (object) $_POST;
+                    $cabecera = $this->session->userdata('carrito');
+                    $detalle = $cabecera;
+                    $data = array(
+                        'idcliente' => $this->addcliente($post),
+                        'fecha' => strftime("%Y-%m-%d"),
+                        'estado_v' => '0'
+                    );
+                    $this->Data->tabla = 'venta';
+                    $this->Data->id = 'idventa';
+                    $idventa = $this->Data->crearVC($data);
+                    $sql = 'INSERT INTO venta_mercaderia(idventa, idinventario_mercaderia, precio) values';
+                    $total = 0;
+                    for ($i = 0; $i < count($detalle); $i++) {
+                        $ins = $detalle[$i]['data'];
+                        $sql .= '(' . $idventa . ', "' . $ins->idinventario_mercaderia. '", ' . $ins->precio_venta . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+    
+                    }
+                    $this->Data->sql($sql);
+                    $this->session->set_userdata('carrito', array());
+                    redirect(base_url() . 'menu/checkout?resp=true');
+                } else {
+                    show_404();
                 }
-                $this->Data->sql($sql);
-                $this->session->set_userdata('carrito', array());
-                redirect(base_url() . 'menu/checkout?resp=true');
-            } else {
-                show_404();
+            }else{
+                redirect(base_url() . 'menu/shop');
             }
         }else{
             redirect(base_url() . 'menu/shop');
         }
+        
         
     }
 	

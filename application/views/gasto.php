@@ -14,7 +14,6 @@
     <?php $this->load->view('archivos/css') ?>
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>static/date.css">
     <link href="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url() ?>static/bootstrap-chosen-master/bootstrap-chosen.css" rel="stylesheet" type="text/css" />
     
 </head>
 
@@ -61,6 +60,11 @@
                     postfix: '$',
                     verticalbuttons: false
                 });
+                //$('.datepicker-input').datepicker( "option", "minDate", new Date()); 
+                $('#field-valor').on('input',function(){ 
+                    this.value = this.value.replace(/[^0-9.]/g,'');
+                });
+                $('#field-valor').attr('maxlength', 8);
             })
         </script>
 

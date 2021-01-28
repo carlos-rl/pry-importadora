@@ -54,7 +54,7 @@ class Ventas extends CI_Controller {
         $crud->display_as('idcliente', 'Detalle del cliente')
         ->display_as('fecha', 'Fecha de la venta')
         ->display_as('estado_v', 'Estado de la venta');
-        $crud->callback_column('fecha',array($this,'_callback_fecha'));
+        //$crud->callback_column('fecha',array($this,'_callback_fecha'));
         $crud->callback_column('estado_v',array($this,'_callback_estado'));
 
         $crud->add_fields('idcliente', 'fecha', 'idventa');

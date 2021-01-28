@@ -45,14 +45,14 @@ class Compras extends CI_Controller {
         $crud = new grocery_CRUD();
         $crud->unset_add();
         $crud->unset_read();
-        $crud->add_action('Mercaderías','','','fa fa-list', array($this, '_ir_imagen'));
+        $crud->add_action('Ver compras','','','fa fa-list', array($this, '_ir_imagen'));
         $crud->set_subject('Compras');
         $crud->set_crud_url_path(base_url('compras/index'));
 
         $crud->set_table('compra');
         $crud->columns('idproveedor', 'fecha');
         $crud->display_as('idproveedor', 'Detalle del proveedor');
-        $crud->callback_column('fecha',array($this,'_callback_fecha'));
+        //$crud->callback_column('fecha',array($this,'_callback_fecha'));
 
         $crud->add_fields('idproveedor', 'fecha', 'idcompra');
         $crud->edit_fields('idproveedor', 'fecha', 'idcompra');

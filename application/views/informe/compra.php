@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Listado de compras por fecha o por número de compra
+                                            Informe de compras
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -146,12 +146,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Por N° de Compras</label>
+                                        <label class="col-sm-3 control-label">Por proveedor</label>
                                         <div class="col-sm-9">
-                                            <select name="idcompra" id="idcompra" class="form-control">
-                                                <option value="0">Todas las compras</option>
+                                            <select name="idproveedor" id="idproveedor" class="form-control">
+                                                <option value="0">Todos los proveedores</option>
                                                 <?php foreach ($compras as $key => $x) { ?>
-                                                    <option value="<?= $x->idcompra ?>">C-<?= str_pad($x->idcompra, 8, "0", STR_PAD_LEFT) ?> (<?= $x->total ?>)</option>
+                                                    <option value="<?= $x->idproveedor ?>"><?= $x->ruc ?> - <?= $x->nombres ?> (<?= $x->total ?>)</option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -173,7 +173,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -181,10 +180,11 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
-            var idcompra = 0;
+            var idproveedor = 0;
             var fechai = '';
             var fechaf = '';
             var tablaDatos = function(btn){
@@ -194,7 +194,7 @@
                     data: {
                         'fechaf': fechaf,
                         'fechai':fechai,
-                        'idcompra': $('#idcompra').val()
+                        'idproveedor': $('#idproveedor').val()
                         },
                     dataType: 'JSON',
                     beforeSend: function () {
@@ -272,8 +272,13 @@
                 $(this).val('');
             });
             $('#exportar').click(function(){
-                window.location= '<?= base_url() ?>compra/pdf?idcompra='+$('#idcompra').val()+'&fechai='+fechai+'&fechaf='+fechaf;
+                window.location= '<?= base_url() ?>compra/pdf?idproveedor='+$('#idproveedor').val()+'&fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>

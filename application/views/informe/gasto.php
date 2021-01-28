@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Listado de gastos por fecha o por tipo de gasto
+                                        Informe de gastos
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -141,10 +141,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Por N° de Venta</label>
+                                        <label class="col-sm-3 control-label">Por tipo de gasto</label>
                                         <div class="col-sm-9">
                                             <select name="idtipogasto" id="idtipogasto" class="form-control">
-                                                <option value="0">Todas las venta</option>
+                                                <option value="0">Todos los tipos de gastos</option>
                                                 <?php foreach ($gastos as $key => $x) { ?>
                                                     <option value="<?= $x->idtipogasto ?>">V-<?= $x->nombre ?> (<?= $x->total ?>)</option>
                                                 <?php } ?>
@@ -168,7 +168,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -176,6 +175,7 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
@@ -264,6 +264,11 @@
             $('#exportar').click(function(){
                 window.location= '<?= base_url() ?>gasto/pdf?idtipogasto='+$('#idtipogasto').val()+'&fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>

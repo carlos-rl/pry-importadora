@@ -76,7 +76,7 @@ class Cliente extends CI_Controller {
 
 
 
-        $crud->add_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion', 'tipo', 'idgrupo', 'idcliente');
+        $crud->add_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion', 'tipo', 'idgrupo');
         $crud->edit_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion', 'tipo', 'idgrupo', 'idcliente');
 
         $crud->set_read_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion');
@@ -92,15 +92,19 @@ class Cliente extends CI_Controller {
 
 
 
-        $crud->set_rules('correo', 'Correo del cliente', 'trim|valid_email|max_length[100]|required');
-        $crud->set_rules('nombres', 'Nombres', 'regex_match[/^[a-z-A-Z ,.]*$/i]' );
-        $crud->set_rules('apellidos', 'apellidos', 'regex_match[/^[a-z-A-Z ,.]*$/i]' );
+        $crud->set_rules('correo', 'Correo del cliente', 'trim|valid_email|max_length[100]');
+        //$crud->set_rules('nombres', 'Nombres', 'regex_match[/^[a-z-A-Z ,.]*$/i]' );
+        //$crud->set_rules('apellidos', 'apellidos', 'regex_match[/^[a-z-A-Z ,.]*$/i]' );
 
 
 
         $crud->callback_column('nombres',array($this,'_callback_nombres'));
         $crud->callback_column('telefono',array($this,'_callback_telefono'));
         $crud->callback_column('correo',array($this,'_callback_correo'));
+
+        $crud->callback_field('correo',function ($value = '', $primary_key = null) {
+            return '<input type="email" maxlength="70" value="'.$value.'" class="form-control" id="correo" name="correo" title="Introduzca una dirección de correo válida" class="form-control" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" >';
+        });
         
         if($crud->getState() === 'insert_validation'){
             $crud->set_rules('cedula', 'Cédula', 'min_length[10]|max_length[10]|callback_validar_add_cedula|required' );
@@ -151,7 +155,7 @@ class Cliente extends CI_Controller {
     }
 
     function _callback_nombres($value, $row){
-        return "<i class='fa fa-user'></i> $value".$row->apellidos;
+        return "<i class='fa fa-user'></i> $value ".$row->apellidos;
     }
 
     function _callback_telefono($value, $row){
@@ -175,9 +179,9 @@ class Cliente extends CI_Controller {
         $this->load->view('informe/cliente.php',array(
             'title' => 'Informe de clientes',
             'nombre' => '',
-            'ventas' => $this->Data->comprasinforme(),
+            'ventas' => $this->Data->venta_cliente(),
             'data_accessos' => $accesos,
-            'subtitle' => 'Buscar por rango',
+            'subtitle' => 'Buscar fecha de creación',
             'fecha' => $fecha
         ));
     }
@@ -187,7 +191,7 @@ class Cliente extends CI_Controller {
             $post = (object) $_POST;
             try {
                 echo '{"lista":'.json_encode(
-                                    $this->Data->cliente_informe($post->fechai, $post->fechaf)
+                                    $this->Data->cliente_informe($post->idcliente)
                                 ).'}';
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
@@ -202,7 +206,7 @@ class Cliente extends CI_Controller {
             try {
                 require_once(APPPATH . '/libraries/mpdfnew/vendor/autoload.php');
                 $post = (object) $_GET;
-                $dat = $this->Data->cliente_informe($post->fechai, $post->fechaf);
+                $dat = $this->Data->cliente_informe($post->idcliente);
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
                 $mpdf->writeHTML(file_get_contents(base_url() . 'static/html/style.css'), \Mpdf\HTMLParserMode::HEADER_CSS);
                 date_default_timezone_set('America/Guayaquil');
@@ -213,6 +217,7 @@ class Cliente extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -223,7 +228,7 @@ class Cliente extends CI_Controller {
                 $htmlPage = str_ireplace('{{v_fechai}}', $post->fechai, $htmlPage);
                 $htmlPage = str_ireplace('{{v_fechaf}}', $post->fechaf, $htmlPage);
                 $htmlPage = str_ireplace('{{fecha_hoy}}', $fecha, $htmlPage);
-                $htmlPage = str_ireplace('{{report_nombre}}', 'Informe de compras', $htmlPage);
+                $htmlPage = str_ireplace('{{report_nombre}}', 'Informe de registros de clientes', $htmlPage);
                 //FIN DE DATOS DE LA FACTURA
 
                 $total = 0;
@@ -241,13 +246,13 @@ class Cliente extends CI_Controller {
                 endforeach;
                 if(count($dat)==0){
 					$htmlTable .= '<tr>';
-                    $htmlTable .= '<td colspan="10" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
+                    $htmlTable .= '<td colspan="6" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
                     $htmlTable .= '</tr>';
                 }
                 $htmlPage = str_ireplace('{{table_row}}', $htmlTable, $htmlPage);
                 //echo $htmlPage ;
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_' . $fecha . '.pdf', 'D');
+                $mpdf->Output('Informe de registros de clientes' . $fecha . '.pdf', 'D');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

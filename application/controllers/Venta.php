@@ -51,6 +51,7 @@ class Venta extends CI_Controller {
             'title' => 'Ventas',
             'nombre' => '',
             'idcompra_after' => $id,
+            'escredito' => $this->Data->escredito($id),
             'idinventario' => $this->Data->venta_inventario($id),
             'idmercaderia' => $this->Data->venta_mercaderia(),
             'idcliente' => $this->Data->venta_cliente_buscar($id),
@@ -94,6 +95,66 @@ class Venta extends CI_Controller {
         }
     }
 
+    public function crearnew() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = (object) $_POST;
+            $detalle = json_decode($_POST['detalle']);
+            $data = array(
+                'idcliente' => $post->idcliente,
+                'fecha' => $post->fecha
+            );
+            $idventa = $this->Data->crearVC($data);
+
+            $sql = 'INSERT INTO venta_mercaderia(idventa, idinventario_mercaderia, precio) values';
+            $total = 0;
+            for ($i = 0; $i < count($detalle); $i++) {
+                $ins = $detalle[$i];
+                $sql .= '(' . $idventa . ', "' . $ins->idinventario_mercaderia. '", ' . $ins->precio_venta . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+                $total = $total + $ins->precio_venta;
+            }
+            $this->Data->sql($sql);
+            $this->credito_new($idventa, $post->idcliente, $post->fechai, $post->cuotas, $total, $post->tipo, $post->pago);
+            
+            echo '{"resp" : true, "idventa":'.$idventa.'}';
+        }
+    }
+
+    private function credito_new($idcompra, $idcliente, $fechai, $num_pago, $total, $tipo, $pago) {
+        $fecha_actual = $fechai;
+        $fechaf  = '';
+        $tipo = ($tipo == '1'?'+ 1 month':($tipo == '2'?'+ 1 week':'+15 day'));
+        for ($i=0; $i < $num_pago ; $i++) {
+            $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
+            if($num_pago == ($i+1)){
+                $fechaf = $fecha_actual;
+            }
+        }
+        $fecha_actual = $fechai;
+        $sql = 'INSERT INTO amortizacion_cuotas(fechapagar, valorcuota, idcredito) values';
+        $varlop = $total / $num_pago;
+
+        /**credito_pagar */
+        $this->Data->tabla = 'credito';
+        $this->Data->id = 'idcredito';
+        $idcredito_pagar = $this->Data->crearVC(
+            array(
+                'deudainicial' => $total,
+                'saldo' => $total,
+                'estado' => ($pago=='si'?1:0),
+                'idcliente' => $idcliente,
+                'idventa' => $idcompra
+            )
+        );
+
+        for ($i = 0; $i < $num_pago; $i++) {
+            $estado = 0;
+            $sql .= '("' . $fecha_actual . '", ' . $varlop. ', '.$idcredito_pagar.')' . ((($num_pago) == $i + 1) ? ' ' : ' ,');
+            $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
+        }
+        $this->Data->sql($sql);
+        return true;
+    }
+
     public function editarventa() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = (object) $_POST;
@@ -111,7 +172,7 @@ class Venta extends CI_Controller {
     private function credito($idcompra, $idcliente, $fechai, $num_pago, $total, $tipo) {
         $fecha_actual = $fechai;
         $fechaf  = '';
-        $tipo = ($tipo == '1'?'+ 1 month':'+ 1 week');
+        $tipo = ($tipo == '1'?'+ 1 month':($tipo == '2'?'+ 1 week':'+15 day'));
         for ($i=0; $i < $num_pago ; $i++) {
             $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
             if($num_pago == ($i+1)){
@@ -171,7 +232,7 @@ class Venta extends CI_Controller {
         $fecha = $diassemana[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
 
         $accesos = $this->Data->listarDetPag($this->session->userdata('idgrupo'));
-        $ins = esConsedido($accesos, 'compras');
+        $ins = esConsedido($accesos, 'ventas');
         if($ins->crear == '0'){
             show_404();
         }
@@ -180,7 +241,7 @@ class Venta extends CI_Controller {
             'nombre' => '',
             'ventas' => $this->Data->ventasinforme(),
             'data_accessos' => $accesos,
-            'subtitle' => 'Buscar por rango o por Número de venta',
+            'subtitle' => 'Buscar por rango o por cliente',
             'fecha' => $fecha
         ));
     }
@@ -190,7 +251,7 @@ class Venta extends CI_Controller {
             $post = (object) $_POST;
             try {
                 echo '{"lista":'.json_encode(
-                                    $this->Data->venta_inventario_informe($post->idventa, $post->fechai, $post->fechaf)
+                                    $this->Data->venta_inventario_informe($post->idcliente, $post->fechai, $post->fechaf)
                                 ).'}';
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
@@ -205,7 +266,7 @@ class Venta extends CI_Controller {
             try {
                 require_once(APPPATH . '/libraries/mpdfnew/vendor/autoload.php');
                 $post = (object) $_GET;
-                $dat = $this->Data->venta_inventario_informe($post->idventa, $post->fechai, $post->fechaf);
+                $dat = $this->Data->venta_inventario_informe($post->idcliente, $post->fechai, $post->fechaf);
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
                 $mpdf->writeHTML(file_get_contents(base_url() . 'static/html/style.css'), \Mpdf\HTMLParserMode::HEADER_CSS);
                 date_default_timezone_set('America/Guayaquil');
@@ -216,6 +277,7 @@ class Venta extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -248,14 +310,14 @@ class Venta extends CI_Controller {
                 endforeach;
                 if(count($dat)==0){
 					$htmlTable .= '<tr>';
-                    $htmlTable .= '<td colspan="7" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
+                    $htmlTable .= '<td colspan="9" align="center">Ningún dato disponible - Impreso '.$fecha .'</td>';
                     $htmlTable .= '</tr>';
                 }
                 $htmlPage = str_ireplace('{{table_row}}', $htmlTable, $htmlPage);
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('reporte_venta' . $fecha . '.pdf', 'D');
+                $mpdf->Output('Informe de ventas' . $fecha . '.pdf', 'I');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

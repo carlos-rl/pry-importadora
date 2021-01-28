@@ -156,6 +156,7 @@ class Devolverventa extends CI_Controller {
 
                 //DATOS DE LA EMPPRESA
                 $idimportadora = $this->session->userdata('idimportadora');
+                $htmlPage = str_ireplace('{{imagen}}', (base_url('static/logo-jhael.png')), $htmlPage);
                 $htmlPage = str_ireplace('{{impor_nombre}}', $idimportadora->nombre, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_direccion}}', $idimportadora->direccion, $htmlPage);
                 $htmlPage = str_ireplace('{{impor_telefono}}', $idimportadora->telefono, $htmlPage);
@@ -166,7 +167,7 @@ class Devolverventa extends CI_Controller {
                 $htmlPage = str_ireplace('{{v_fechai}}', $post->fechai, $htmlPage);
                 $htmlPage = str_ireplace('{{v_fechaf}}', $post->fechaf, $htmlPage);
                 $htmlPage = str_ireplace('{{fecha_hoy}}', $fecha, $htmlPage);
-                $htmlPage = str_ireplace('{{report_nombre}}', 'Informe de devoluciones', $htmlPage);
+                $htmlPage = str_ireplace('{{report_nombre}}', 'Informe de devolución', $htmlPage);
                 //FIN DE DATOS DE LA FACTURA
 
                 $total = 0;

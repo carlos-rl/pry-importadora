@@ -74,7 +74,7 @@
                             <div class="panel">
                                 <div class="panel-body">
                                     <h3 class="title-hero">
-                                        Listado de compras por rango de fecha
+                                        Informe de registros de clientes
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
@@ -123,15 +123,14 @@
                             <div class="col-md-12">
                                 <div class="form-horizontal bordered-row">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-3 control-label">Buscar por rango</label>
+                                        <label class="col-sm-3 control-label">Por clientes</label>
                                         <div class="col-sm-9">
-                                            <div class="input-prepend input-group">
-                                                <span class="add-on input-group-addon">
-                                                    <i class="glyph-icon icon-calendar"></i>
-                                                </span>
-                                                <input type="text" name="fecha" id="fecha" class="form-control" value=""
-                                                    placeholder="Buscar por fecha">
-                                            </div>
+                                            <select name="idcliente" id="idcliente" class="form-control">
+                                                <option value="0">Todos los clientes</option>
+                                                <?php foreach ($ventas as $key => $x) { ?>
+                                                    <option value="<?= $x->idcliente ?>">CI- <?= $x->cedula ?>, <?= $x->nombres ?> <?= $x->apellidos ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -151,7 +150,6 @@
         <script type="text/javascript" src="<?= base_url('static/admin/') ?>assets/widgets/skycons/skycons.js"></script>
         <!-- JS Demo -->
 
-        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <!-- bootstrap time picker -->
         <script src="<?= base_url() ?>static/moment/moment.js" type="text/javascript"></script>
@@ -159,6 +157,7 @@
 
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
@@ -170,8 +169,8 @@
                     url: '<?= base_url() ?>cliente/listarreporte',
                     type: 'POST',
                     data: {
-                        'fechaf': fechaf,
-                        'fechai':fechai
+                        //'fechaf': fechaf,
+                        'idcliente':fechai
                         },
                     dataType: 'JSON',
                     beforeSend: function () {
@@ -232,13 +231,14 @@
                 "applyClass": "btn-success btn-xs btn-cr"
             });
             $('#buscar').click(function(){
+                fechai = $('#idcliente').val();
                 tablaDatos($(this));
             });
-            $('input[name="fecha"]').on('apply.daterangepicker', function(ev, picker) {
+            /***$('input[name="fecha"]').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                 fechai = picker.startDate.format('YYYY-MM-DD');
                 fechaf = picker.endDate.format('YYYY-MM-DD');
-            });
+            }); */
 
             $('input[name="fecha"]').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
@@ -246,6 +246,11 @@
             $('#exportar').click(function(){
                 window.location= '<?= base_url() ?>cliente/pdf?fechai='+fechai+'&fechaf='+fechaf;
             });
+            $('input[name="fecha"]').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9/-\s]/g,'');
+            });
+            $('input[name="fecha"]').attr('readonly', true);
+            $('input[name="fecha"]').attr('maxlength', 23);
         })
         </script>
     </div>
