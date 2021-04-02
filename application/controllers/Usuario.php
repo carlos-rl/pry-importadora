@@ -95,9 +95,16 @@ class Usuario extends CI_Controller {
         
         if($crud->getState() === 'insert_validation'){
             $crud->set_rules('usuario', 'Correo del usuario', 'trim|valid_email|min_length[8]|max_length[100]|callback_validar_add_nombre|required' );
+            $crud->callback_field('contrasenia',function ($value = '', $primary_key = null) {
+                return '<input id="contrasenia" type="password" data-eye="" maxlength="50" value="'.$value.'" title="Ingresar su contraseña" class="form-control" required name="contrasenia">';
+            });
         }
 
         if($crud->getState() === 'update_validation'){
+            $crud->callback_field('contrasenia',function ($value = '', $primary_key = null) {
+                return '<input id="contrasenia" type="password" maxlength="50"  data-eye="" value="'.$this->encrypt->decode($value).'" title="Ingresar su contraseña" class="form-control" required name="contrasenia">';
+            });
+            
             $crud->set_rules('usuario', 'Correo del usuario', 'trim|valid_email|min_length[8]|max_length[100]|callback_validar_edit_nombre|required');
         }
 
@@ -106,9 +113,7 @@ class Usuario extends CI_Controller {
             return '<input id="usuario" type="email" maxlength="50" value="'.$value.'" title="Introduzca una dirección de correo válida" class="form-control" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required name="usuario">';
         });
 
-        $crud->callback_field('contrasenia',function ($value = '', $primary_key = null) {
-            return '<input id="contrasenia" type="password" maxlength="50" value="'.$value.'" title="Ingresar su contraseña" class="form-control" required name="contrasenia">';
-        });
+        
 
         $this->_example_output($crud);
     }
@@ -120,7 +125,7 @@ class Usuario extends CI_Controller {
 
     function decrypt_password_callback($value){
         $decrypted_password = $this->encrypt->decode($value);
-        return "<input type='password' class='form-control' name='contrasenia' value='$decrypted_password' />";
+        return "<input type='password'  data-eye class='form-control' name='contrasenia' value='$decrypted_password' />";
     }
 
     function validar_add_nombre($str){

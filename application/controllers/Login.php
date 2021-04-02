@@ -23,6 +23,7 @@ class Login extends CI_Controller {
             'breadcrumb' => 'Login',
             'page_header' => 'Login',
             'list_title' => 'Login',
+            'idimportadora' => $this->Data->buscarRegistro_em('importadora','idimportadora = 1'),
             'nameform' => 'login',
             'titleform' => 'Administración del login'
         );

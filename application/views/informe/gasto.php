@@ -179,6 +179,9 @@
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
+            function formatMoney(number) {
+                return parseFloat(number).toFixed(2);
+            }
             var idtipogasto = 0;
             var fechai = '';
             var fechaf = '';
@@ -206,17 +209,18 @@
                     var total = 0;
                     for(var i in data){
                         var d = data[i];
+                        d.valor = parseFloat(formatMoney(d.valor));
                         var html = '<tr>';
                         html +='<th scope="row">'+ (i*1+1) +'</th>';
                         html +='<td class="">'+(d.fecha).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.nombre).toUpperCase()+' </td>';
-                        html +='<td class="">$ '+(d.valor).toUpperCase()+'</td>';
-                        html +='<td class="">$ '+(d.valor).toUpperCase()+'</td>';
+                        html +='<td class="">$ '+(d.valor)+'</td>';
+                        html +='<td class="">$ '+(d.valor)+'</td>';
                         html +='</tr>';
                         $("#tbody_").append(html);
                         total = total + parseFloat(d.valor);
                     }
-                    $("#total_amount").html('$'+ (total).toFixed(2));
+                    $("#total_amount").html('$'+ new Intl.NumberFormat("de-DE").format(total));
                     if(data.length < 1){
                         $('#tbody_').html('<tr> <td colspan="5">Ningún dato en la tabla</td>');
                     }

@@ -99,7 +99,7 @@ class Devolverventa extends CI_Controller {
 
     function validar_add_idinventario_mercaderia($str){
         if($this->Data->existe_devolver_('v', $str)){
-            $this->form_validation->set_message('validar_add_idinventario_mercaderia',"No puede devolver 2 veces el mismo inventario de la compra");
+            $this->form_validation->set_message('validar_add_idinventario_mercaderia',"No puede devolver 2 veces el mismo inventario con esta mercadería");
             return false;
         }else{
             return true;

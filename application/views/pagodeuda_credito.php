@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <h2 class="invoice-client mrg10T">Información del cliente y su deuda:</h2>
-                                <h5><label for=""><label for="" id="nombre"><?= $idcredito_pagar->nombres ?> </label></label> </h5>
+                                <h5><label for=""><label for="" id="nombre"><?= $idcredito_pagar->apellidos ?> <?= $idcredito_pagar->nombres ?> </label></label> </h5>
                                 <address class="invoice-address">
                                 <div for="" id=""><strong>Cédula: </strong> <?= $idcredito_pagar->cedula==''?'<a class="text-danger" href="'.base_url('cliente/index/edit/').$idcredito_pagar->idcliente.'">Necesita actualizar los datos</a>':$idcredito_pagar->cedula ?></div>
                                     <div for="" id=""><strong>Deuda: </strong> $ <?= $idcredito_pagar->deudainicial ?></div>

@@ -168,6 +168,9 @@
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo-2.js"></script>
         <script>
         $(function() {
+            function formatMoney(number) {
+                return parseFloat(number).toFixed(2);
+            }
             //$('#modal_buscar').modal('show')
             var idcompra = 0;
             var fechai = '';
@@ -195,18 +198,19 @@
                     var total = 0;
                     for(var i in data){
                         var d = data[i];
+                        d.costo = parseFloat(formatMoney(d.costo))
                         var html = '<tr>';
                         html +='<th scope="row">'+ (i*1+1) +'</th>';
                         html +='<td class="">'+(d.nombres).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.ruc).toUpperCase()+'</td>';
                         html +='<td class="">'+(d.telefono).toUpperCase()+'</td>';
-                        html +='<td class="">$ '+(d.costo).toUpperCase()+'</td>';
-                        html +='<td class="">$ '+(d.costo).toUpperCase()+'</td>';
+                        html +='<td class="">$ '+d.costo+' </td>';
+                        html +='<td class="">$ '+d.costo+'</td>';
                         html +='</tr>';
                         $("#tbody_").append(html);
-                        total = total + parseFloat(d.costo);
+                        total = total + d.costo;
                     }
-                    $("#total_amount").html('$'+ (total).toFixed(2));
+                    $("#total_amount").html('$'+ new Intl.NumberFormat("de-DE").format(total));
                     if(data.length < 1){
                         $('#tbody_').html('<tr> <td colspan="7">Ningún dato en la tabla</td>');
                     }

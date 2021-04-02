@@ -44,6 +44,7 @@ class Credito extends CI_Controller {
 
         $crud->set_table('credito');
         $crud->set_relation('idventa','venta','N° 000{idventa}');
+        $crud->set_relation('idcliente','cliente','{apellidos} {nombres} CI. {cedula}');
         $crud->columns('idventa','idcliente', 'saldo','deudainicial');
 
         $crud->display_as('saldo', 'Saldo')
@@ -55,7 +56,7 @@ class Credito extends CI_Controller {
 
         $crud->callback_column('deudainicial',array($this,'_callback_dollar'));
         $crud->callback_column('saldo',array($this,'_callback_dollar'));
-        $crud->callback_column('idcliente',array($this,'_callback_cliente'));
+        //$crud->callback_column('idcliente',array($this,'_callback_cliente'));
 
         $crud->unset_add();
         $crud->unset_edit();

@@ -14,57 +14,343 @@ if ($this->session->userdata('admin')) {
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/jpg" href="<?= base_url() ?>static/imagen/almacen.png">
         <!-- Bootstrap CSS-->
-        <link rel="stylesheet" href="<?= base_url() ?>static/bootstrap-3.3.7-dist/css/bootstrap.css">
         <!-- Vendor CSS-->
         <link rel="stylesheet" href="<?= base_url() ?>static/admin/vendor/fontawesome/css/font-awesome.min.css">
         <style>
-            .login-form {
-                width: 340px;
-                margin: 50px auto;
-            }
-            .login-form form {
-                margin-bottom: 15px;
-                background: #f7f7f7;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-                padding: 30px;
-            }
-            .login-form h2 {
-                margin: 0 0 15px;
-            }
-            .form-control, .btn {
-                min-height: 38px;
-                border-radius: 2px;
-            }
-            .btn {        
-                font-size: 15px;
-                font-weight: bold;
-            }
+            
+
+            @charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+.sr-only {
+  visibility: hidden;
+}
+
+.hidden {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  display: none;
+  overflow: hidden;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Rubik", sans-serif;
+  position: relative;
+  background-color: #fbfcfc;
+  background-image: url("<?= base_url('static/banner/banner-2.jpg') ?>");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.challenge-title {
+  text-align: center;
+  padding: 0;
+  margin: 1rem 0 0.5rem;
+  color: #0d1117;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.challenge-subtitle {
+  text-align: center;
+  margin: 0;
+  font-size: 1.125rem;
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.challenge-part-of {
+  text-align: center;
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: #0d1117;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  border-radius: 0.5rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.challenge-part-of a,
+.challenge-part-of a:visited {
+  color: #0d1117;
+  -webkit-text-decoration-style: wavy;
+          text-decoration-style: wavy;
+}
+.challenge-part-of a:hover, .challenge-part-of a:active,
+.challenge-part-of a:visited:hover,
+.challenge-part-of a:visited:active {
+  color: #1f2938;
+}
+
+.login-card {
+  margin: auto;
+  width: 800px;
+  min-height: 400px;
+  display: flex;
+  align-items: stretch;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.login-glass {
+  flex: 0 0 40%;
+  background-color: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-glass svg {
+  width: 30%;
+  fill: white;
+}
+
+.login-form-container {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: white;
+}
+.login-form-container .login-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 0 0 2rem;
+}
+.login-form-container .form-control {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+.login-form-container .form-control:not(:last-of-type) {
+  margin-bottom: 1.5rem;
+}
+.login-form-container .form-control > label {
+  position: absolute;
+  font-weight: bold;
+  color: #4d555f;
+  font-size: 0.875rem;
+  top: 0;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  background-color: white;
+  padding: 0 0.25rem;
+}
+.login-form-container .form-control > input {
+  flex: 1 0 auto;
+  padding: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5da;
+  transition: border-color 0.2s ease;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+.login-form-container .form-control > input:hover {
+  border-color: #e56b6f;
+}
+.login-form-container .form-control > input:focus {
+  outline: 0;
+  border-color: #e56b6f;
+}
+.login-form-container .form-control .form-remember,
+.login-form-container .form-control .form-forgot {
+  flex: 1 0 50%;
+  display: flex;
+  align-items: center;
+}
+.login-form-container .form-control .form-remember label {
+  cursor: pointer;
+  color: #7c8896;
+  transition: color 0.2s ease;
+  padding-left: 0.5rem;
+  position: relative;
+}
+.login-form-container .form-control .form-remember label:hover {
+  color: #0d1117;
+}
+.login-form-container .form-control .form-remember label::before {
+  content: "";
+  position: absolute;
+  font-family: "Font Awesome 5 Free";
+  top: 50%;
+  transform: translateY(-50%);
+  left: -0.875rem;
+  color: #7c8896;
+}
+.login-form-container .form-control .form-remember input:hover + label {
+  color: #0d1117;
+}
+.login-form-container .form-control .form-remember input:checked + label::before {
+  content: "";
+}
+.login-form-container .form-control .form-remember input {
+  cursor: pointer;
+  margin: 0;
+  opacity: 0;
+}
+.login-form-container .form-control .form-forgot {
+  justify-content: flex-end;
+}
+.login-form-container .form-control .form-forgot a,
+.login-form-container .form-control .form-forgot a:focus {
+  color: #e56b6f;
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+.login-form-container .form-control .form-forgot a:hover, .login-form-container .form-control .form-forgot a:active,
+.login-form-container .form-control .form-forgot a:focus:hover,
+.login-form-container .form-control .form-forgot a:focus:active {
+  text-decoration: underline;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  background-color: #e56b6f;
+  border: 0;
+  color: white;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid #e56b6f;
+  transition: background-color 0.1s ease-in;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+.btn:hover {
+  background-color: #e98184;
+}
+.btn:active {
+  background-color: #e1555a;
+}
+.btn:focus {
+  outline: 1px dotted #c72328;
+}
+.btn.btn-full {
+  flex: 1 0 auto;
+  font-weight: bold;
+  font-size: 0.875rem;
+  justify-content: center;
+}
+.btn.btn-default {
+  background-color: white;
+  color: #98a1ad;
+  border-color: #d1d5da;
+}
+.btn.btn-default:hover {
+  background-color: #f1f2f4;
+}
+.btn.btn-default:active {
+  background-color: #e3e5e8;
+}
+
+.divider {
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  font-size: 0.875rem;
+  color: #b5bbc3;
+  position: relative;
+}
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 140px;
+  height: 1px;
+  background-color: #d1d5da;
+}
+.divider::before {
+  left: 0;
+  transform: translateX(-100%);
+}
+.divider::after {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.social-list {
+  display: flex;
+  align-items: center;
+  margin: 0 -0.5rem;
+}
+.social-list li {
+  flex: 0 0 33.3333333333%;
+  padding: 0 0.5rem;
+}
+.social-list li .btn {
+  width: 100%;
+  justify-content: center;
+}
+.login-form-container .form-control > label {
+    z-index: 999;
+    background-color: #fff0;
+}
         </style>
     </head>
     <body>
-    <div class="login-form">
-        <form autocomplete="off" id="frmEntidad" name="frmEntidad" method="POST">
-            <h2 class="text-center">Ingresar al sistema</h2>       
-            <div class="form-group">
-                <input type="email" class="form-control" placeholder="Ingresar correo" name="usuario" id="usuario" required="required">
-            </div>
-            <div class="form-group">
-                <input type="password" id="pass" name="pass" class="form-control" placeholder="Ingresar su contraseña" required="required">
-            </div>
-            <div class="form-group">
-            <button  type="submit" class="btn btn-success btn-block submit ingresar">Ingresar</button>
+    <h1 class="challenge-title"><?= $idimportadora->nombre ?></h1>
+<h2 class="challenge-subtitle">Bienvenido</h2>
+
+<div class="login-card">
+	<div class="login-glass">
+		<img width="280" src="<?= base_url('static/banner/logojhael.png') ?>" alt="">
+	</div>
+	<div class="login-form-container">
+		<h3 class="login-title">
+			Ingresar al sistema
+		</h3>
+		<form autocomplete="off" id="frmEntidad" name="frmEntidad" method="POST">
+			<div class="form-control">
+				<label for="email">Ingresar correo</label>
+				<input id="usuario" name="usuario" type="email" autocomplete="off" required />
+			</div>
+			<div class="form-control">
+				<label for="password">Ingresar contraseña</label>
+				<input id="pass" name="pass" type="password" required />
+			</div>
+			
+			<div class="form-control">
+				<button class="btn btn-full submit ingresar">
+					Ingresar
+				</button>
+
+                
+			</div>
             <div class="form-group" style="margin: 20px">
                 <div id="alerta" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
                     <!--<a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>-->
                     <div id="alerta_texto"></div>
                 </div>
             </div>
-            </div>
-                 
-        </form>
-        
-    </div>
-
+		</form>
+		
+	</div>
+</div>
     
     
     <!-- 

@@ -104,10 +104,14 @@
                                 <tr id='addr1'></tr>
                             </tbody>
                             <tfoot>
-                                <tr class="font-bold font-black" style="display:none">
+                                <tr class="font-bold font-black">
                                     <td colspan="6" class="text-right">Subtotal:</td>
                                     <td colspan="3" id="sub_total">$0.00</td>
-                                    <input type="hidden" class="form-control" id="tax" value="0" placeholder="0">
+                                </tr>
+                                <tr class="font-bold font-black">
+                                    <td colspan="6" class="text-right">IVA:</td>
+                                    <td colspan="3" id="iva_subtotal">$0.00</td>
+                                    <input type="hidden" class="form-control" id="tax" value="<?= $idproveedor->iva ?>" placeholder="0">
                                 </tr>
                                 <tr class="font-bold font-black">
                                     <td colspan="6" class="text-right">TOTAL:</td>
@@ -344,9 +348,10 @@
             function calc_total() {
                 total = 0;
                 $('.total').each(function() {
-                    total += parseInt($(this).html());
+                    total += parseFloat($(this).html());
                 });
                 $('#sub_total').html('$ '+total.toFixed(2));
+                $('#iva_subtotal').html('$ '+(total.toFixed(2)*($('#tax').val()/100)).toFixed(2)+' ('+<?= $idproveedor->iva ?>+'%)');
                 tax_sum = total / 100 * $('#tax').val();
                 $('#tax_amount').html('$'+tax_sum.toFixed(2));
                 $('#total_amount').html('$'+(tax_sum + total).toFixed(2));

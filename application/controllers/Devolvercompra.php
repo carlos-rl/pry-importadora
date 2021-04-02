@@ -74,20 +74,20 @@ class Devolvercompra extends CI_Controller {
         $crud->required_fields('fecha', 'motivo', 'resultado', 'idinventario_mercaderia');
 
         if($crud->getState() === 'insert_validation'){
-            $crud->set_rules('idinventario_mercaderia', 'Serie - Modelo del inventario devuelto', 'min_length[2]|callback_validar_add_idinventario_mercaderia|required' );
-            $crud->callback_field('idinventario_mercaderia', function ($value, $primary_key){
-                $html = '';
-                $html .= '<select class="form-control" name="idinventario_mercaderia" id="idinventario_mercaderia">';
-                foreach ($this->Data->listarinventario_devolver_compra() as $key => $x) {
-                    $html .= '<option value="'.$x->idinventario_mercaderia.'">'.$x->serie.' - '.$x->modelo.'</option>';
-                }
-                $html .= '</select>';
-                return $html;
-            });
+            $crud->set_rules('idinventario_mercaderia', 'Serie - Modelo del inventario devuelto', 'callback_validar_add_idinventario_mercaderia|required' );
+            
         }
 
         
-        
+        $crud->callback_field('idinventario_mercaderia', function ($value, $primary_key){
+            $html = '';
+            $html .= '<select class="form-control" name="idinventario_mercaderia" id="idinventario_mercaderia">';
+            foreach ($this->Data->listarinventario_devolver_compra() as $key => $x) {
+                $html .= '<option value="'.$x->idinventario_mercaderia.'">'.$x->serie.' - '.$x->modelo.'</option>';
+            }
+            $html .= '</select>';
+            return $html;
+        });
         $this->_example_output($crud);
     }
 

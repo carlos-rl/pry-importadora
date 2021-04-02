@@ -82,7 +82,7 @@
         <script src="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
         <script>
             $(function(){
-                $('input[name="fecha"]').remove()
+                $('.filter-row input[name="fecha"]').remove()
             })
         </script>
     </div>

@@ -12,6 +12,9 @@
     <?php $this->load->view('archivos/css') ?>
     <link href="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css">
+<!-- select2 -->
+<link href="<?= base_url() ?>static/lib/select2/select2.min.css" rel="stylesheet" media="screen">
+		<link href="<?= base_url() ?>static/lib/select2-bootstrap-theme-master/dist/select2-bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 
 <body>
@@ -91,23 +94,21 @@
                             <div class="col-md-4">
                                 <h2 class="invoice-client mrg10T">Añadir mercadería</h2>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label for="idmercaderia">Seleccionar una mercadería</label>
-                                        <select name="idmercaderia" class="form-control input-sm" id="idmercaderia"
-                                            style="margin-top:10px">
-                                            <option value="0">Seleccionar Marca - Modelo</option>
+                                        <select name="idmercaderia" class="form-control input-sm" id="idmercaderia">
+                                            <option value="0">Seleccionar Nombre, {Marca - Modelo}</option>
                                             <?php foreach ($idmercaderia as $key => $x) { ?>
-                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idmercaderia ?>"><?= $x->nombre ?> - <?= $x->modelo ?></option>
+                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idmercaderia ?>"><?= $x->mercaderia==''?'Sin nombre':$x->mercaderia ?> {<?= $x->nombre ?> - <?= $x->modelo ?>}</option>
                                             <?php } ?>
-                                              
                                         </select>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12" style="margin-top:10px">
                                         <label for="serie">Ingresar una serie</label>
                                         <input type="text" maxlength="20" id="serie" class="form-control input-sm" placeholder="Serie"
-                                            value="" style="margin-top:10px">
+                                            value="">
                                     </div>
-                                    <div class="col-sm-6" style="margin-top:10px">
+                                    <div class="col-sm-12" style="margin-top:10px">
                                         <label for="idmercaderia">Garantia #</label>
                                         <select name="garantia" class="form-control input-sm" id="garantia"
                                             style="margin-top:10px">
@@ -122,7 +123,7 @@
                                             <option value="18">18 meses de garantía</option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-6" style="margin-top:10px">
+                                    <div class="col-sm-12" style="margin-top:10px">
                                         <label for="idmercaderia">Agregar compra</label>
                                         <button class="btn btn-block btn-info btn-sm" id="add_row" style="margin-top:10px">
                                             Agregar <i class="glyph-icon fa fa-plus"></i>
@@ -158,8 +159,13 @@
                                 <tr class="font-bold font-black">
                                     <td colspan="5"></td>
                                     <td class="text-right">
-                                        <div class="input-group mb-2 mb-sm-0">
-                                            <input type="number" class="form-control" id="tax" value="" placeholder="0">
+                                        <div class="input-group">
+                                            <select name="tax" id="tax" class="form-control">
+                                                <?php for ($i=0; $i < 31 ; $i++) {  ?>
+                                                    <option <?= $i==12?'selected':'' ?> value="<?= $i ?>"><?= $i ?></option>
+                                                    <?php $i++; ?>
+                                                <?php } ?>
+                                            </select>
                                             <div class="input-group-addon">%</div>
                                         </div>
                                     </td>
@@ -244,6 +250,7 @@
                                     <select name="" id="tipo" class="form-control">
                                         <option value="1">Mes</option>
                                         <option value="2">Semana</option>
+                                        <option value="3">Cada 15 días</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4"><br>
@@ -283,6 +290,34 @@
 
             </div>
         </div>
+        <div id="modal_metodo" class="modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Seleccionar el método de pago</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"><br>
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="contado">
+                                       <i class="fa fa-dollar"></i> Pagar al contado
+                                    </button><br>
+                                </div>
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="credito">
+                                        <i class="fa fa-money"></i> Pagar a crédito
+                                    </button>
+                                </div>
+                            </div><br><br>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- JS Demo -->
         <script src="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
@@ -294,6 +329,11 @@
         <script src="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
         
         <script type="text/javascript" src="<?= base_url() ?>static/Inputmask/dist/jquery.inputmask.js"></script>
+        
+		<!-- select2 -->
+        <script src="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>static/lib/select2/select2.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
         <script>
         $(function() {
             
@@ -316,6 +356,11 @@
             $('#seleccionar_proveedor').click(function(){
                 $('#modal_proveedor').modal('show');
             });
+
+            $('#idmercaderia').select2({
+                placeholder: 'Buscar Mercadería',
+                theme: "bootstrap"
+            });
             $('#body_proveedor').on('click', 'button[rel="seleccionar"]', function () {
                 var data = $(this).data('json'),
                         json = data.json,
@@ -332,12 +377,12 @@
                 //html += '<tr id="addr'+id+'">'
                 html += '<td>0</td>'
                 html += '<td class="serie">'+data.serie+'</td>'
-                html += '<td>'+data.mercaderia.nombre+' - '+data.mercaderia.modelo+'</td>'
+                html += '<td class="nombre_artc"> '+data.mercaderia.nombre+' - '+data.mercaderia.modelo+'</td>'
                 html += '<td>'+data.garantia.text+'</td>'
                 html += '<td class="text-center">'
                 html += '<input type="text" id="costo_'+id+'" costo="'+id+'" value="0" placeholder="Ingresar el costo" class="form-control qty">'
                 html += '</td>'
-                html += '<td><input type="text" readonly id="precio_'+id+'" precio= "'+id+'" value="0" placeholder="Precio al público" class="form-control price"></td>'
+                html += '<td><input type="text"  id="precio_'+id+'" precio= "'+id+'" value="0" placeholder="Precio al público" class="form-control price"></td>'
                 html += '<td class="" style="vertical-align:middle">'
                 html += '<div class="input-group mb-2 mb-sm-0 " style="display:flex">'
                 html += '$ <div class="total">0.00</div> '
@@ -584,6 +629,10 @@
                 }
                 if(idproveedor_g != '0'){
                     $('#tab_logic tbody tr').each(function(i, element) {
+                        if(parseFloat($(this).find('.qty').val())<1){
+                            alert('Debe ingresar un precio al producto '+$(this).find('.nombre_artc').html())
+                            return false;
+                        }
                         var html = $(this).html();
                         if (typeof ($(this).find('.serie').html()) != 'undefined') {//if (html != '') {
                             detalle_g.push({
@@ -597,14 +646,14 @@
                         }
                     });
                     if(!existe){
-                        alert('Agregar por lo menos 1 producto')
+                        alert('Agregar por lo menos 1 producto con el precio')
                     }else{
-                        if(confirm('Realizar el pago ¿a crédito?')){
+                        /**if(confirm('Realizar el pago ¿a crédito?')){
                             $('#modal_pagos').modal('show');
                         }else{
                             guardar_compra('si');
-                        }
-                        
+                        } */
+                        $('#modal_metodo').modal('show');
                     }
                     
                 }else{
@@ -612,13 +661,23 @@
                 }
             });
 
+            $('#contado').click(function(){
+                guardar_compra('si');
+            })
+            $('#credito').click(function(){
+                $('#modal_pagos').modal('show');
+                $('#modal_metodo').modal('hide');
+            });
+
             var data_add_compra = function(fechai, tipo, cuotas, idcuentabancaria,  pagado){
+                var iva = $('#tax').val();
                 var data = {
                     idproveedor:idproveedor_g,
                     fecha:fecha_g,
                     detalle: JSON.stringify(detalle_g),
                     fechai:fechai,
                     tipo:tipo,
+                    iva:iva,
                     cuotas:cuotas,
                     idcuentabancaria:idcuentabancaria,
                     pagado:pagado

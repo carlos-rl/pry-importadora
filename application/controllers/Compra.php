@@ -103,7 +103,8 @@ class Compra extends CI_Controller {
             $detalle = json_decode($_POST['detalle']);
             $data = array(
                 'idproveedor' => $post->idproveedor,
-                'fecha' => $post->fecha
+                'fecha' => $post->fecha,
+                'iva' => $post->iva
             );
             $idcompra = $this->Data->crearVC($data);
 
@@ -114,6 +115,8 @@ class Compra extends CI_Controller {
                 $sql .= '(' . $idcompra . ', "' . $ins->serie. '", ' . $ins->costo . ', ' . $ins->precio_venta . ', ' . $ins->garantia_meses . ', ' . $ins->idmercaderia . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
                 $total = $total + $ins->costo;
             }
+            $total = ($total * ($post->iva/100)) + $total;
+
             $this->Data->sql($sql);
             $this->creditoCompra($idcompra, $post->idproveedor, $post->fechai, $post->cuotas, $total, $post->tipo, $post->idcuentabancaria,$post->pagado);
             
@@ -124,7 +127,7 @@ class Compra extends CI_Controller {
     private function creditoCompra($idcompra, $idproveedor, $fechai, $num_pago, $total, $tipo, $idcuentabancaria, $pagado) {
         $fecha_actual = $fechai;
         $fechaf  = '';
-        $tipo = ($tipo == '1'?'+ 1 month':'+ 1 week');
+        $tipo = ($tipo == '1'?'+ 1 month':($tipo == '2'?'+ 1 week':'+15 day'));
         for ($i=0; $i < $num_pago ; $i++) {
             $fecha_actual = date("Y-m-d",strtotime($fecha_actual.$tipo));
             if($num_pago == ($i+1)){

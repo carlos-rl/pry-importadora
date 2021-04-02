@@ -24,6 +24,8 @@ class Menu extends CI_Controller {
             'nameform' => 'welcome',
             'numcompra' => $this->Data->numTabla('compra'),
             'numventa' => $this->Data->numTabla('venta'),
+            'numcliente' => $this->Data->numTabla('cliente'),
+            'numproveedor' => $this->Data->numTabla('proveedor'),
             'imagen' => $this->Data->listarmercaderia(),
             'v_grafico_1' => $this->Data->venta_inventario_grafico_1(),
             'c_grafico_1' => $this->Data->compra_inventario_grafico_1(),
@@ -252,7 +254,7 @@ class Menu extends CI_Controller {
                 'telefono' => $post->telefono,
                 'correo' => strtolower($post->email),
                 'direccion' => $post->direccion
-            ), $this->session->userdata('idcliente'));
+            ), $cliente->idcliente);
             return $cliente->idcliente;
         }
     }

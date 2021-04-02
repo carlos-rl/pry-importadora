@@ -58,6 +58,66 @@
                 
                 $('.filter-row > td:nth-child(7), .filter-row > td:nth-child(6) > input').remove();
                 $('.filter-row > td:nth-child(6)').attr('colspan','2');
+
+
+
+                $("input[type='password'][data-eye]").each(function(i) {
+                    var $this = $(this),
+                        id = 'eye-password-' + i,
+                        el = $('#' + id);
+
+                    $this.wrap($("<div/>", {
+                        style: 'position:relative',
+                        id: id
+                    }));
+
+                    $this.css({
+                        paddingRight: 60
+                    });
+                    $this.after($("<div/>", {
+                        html: 'Ver',
+                        class: 'btn btn-primary btn-xs',
+                        id: 'passeye-toggle-' + i,
+                    }).css({
+                        position: 'absolute',
+                        right: 14,
+                        top: ($this.outerHeight() / 2) - 10,
+                        padding: '0px 7px',
+                        fontSize: 10,
+                        cursor: 'pointer',
+                        color: 'white',
+                    }));
+
+                    $this.after($("<input/>", {
+                        type: 'hidden',
+                        id: 'passeye-' + i
+                    }));
+
+                    var invalid_feedback = $this.parent().parent().find('.invalid-feedback');
+
+                    if (invalid_feedback.length) {
+                        $this.after(invalid_feedback.clone());
+                    }
+
+                    $this.on("keyup paste", function() {
+                        $("#passeye-" + i).val($(this).val());
+                    });
+                    var contras = $this.val();
+                    $("#passeye-toggle-" + i).on("click", function() {
+                        if ($this.hasClass("show")) {
+                            $this.attr('type', 'password');
+                            $this.removeClass("show");
+                            $(this).removeClass("btn-outline-primary");
+                            $this.val(contras)
+                        } else {
+                            $this.attr('type', 'text');
+                            $this.val($("#passeye-" + i).val());
+                            $this.addClass("show");
+                            $(this).addClass("btn-outline-primary");
+                            $this.val(contras)
+                        }
+                    });
+                });
             })
         </script>
     </div>

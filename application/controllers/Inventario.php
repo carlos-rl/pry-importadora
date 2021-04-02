@@ -46,7 +46,7 @@ class Inventario extends CI_Controller {
         $crud->columns('idcompra', 'idmercaderia', 'serie', 'costo', 'precio_venta', 'garantia_meses', 'estado_inv', 'estado');
 
         $crud->display_as('idcompra', 'N°  de compra')
-        ->display_as('idmercaderia', 'Marca - Mercadería')
+        ->display_as('idmercaderia', 'Mercadería - Marca')
         ->display_as('serie', 'Serie del inventario')
         ->display_as('costo', 'Costo')
         ->display_as('precio_venta', 'PVP')
@@ -76,7 +76,11 @@ class Inventario extends CI_Controller {
             return '<label class="label label-success">Disponible</label>';
         }
         if($value == '2'){
-            return '<label class="label label-danger">Vendido</label>';
+            if($row->estado_venta=='0'){
+                return '<label class="label label-danger">Vendido</label>';
+            }else{
+                return '<label class="label label-danger">Devuelto en la venta</label>';
+            }
         }
         if($value == '3'){
             return '<label class="label label-warning">Devuelto</label>';
@@ -97,7 +101,7 @@ class Inventario extends CI_Controller {
 
     function _callback_mercaderia($value, $row){
         $ins = $this->Data->buscar_mercaderia($value);
-        return strtoupper($ins->modelo).' - '.strtoupper($ins->nombre);
+        return strtoupper($ins->mercaderia.', '.$ins->modelo);
     }
 
     public function catalogo() {

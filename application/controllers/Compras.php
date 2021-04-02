@@ -50,6 +50,7 @@ class Compras extends CI_Controller {
         $crud->set_crud_url_path(base_url('compras/index'));
 
         $crud->set_table('compra');
+        $crud->order_by('idcompra','desc');
         $crud->columns('idproveedor', 'fecha');
         $crud->display_as('idproveedor', 'Detalle del proveedor');
         //$crud->callback_column('fecha',array($this,'_callback_fecha'));

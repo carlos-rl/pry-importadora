@@ -52,6 +52,7 @@ class Ctaporpagar extends CI_Controller {
         $crud->set_crud_url_path(base_url('ctaporpagar/index'));
 
         $crud->set_table('credito_pagar');
+        $crud->order_by('idcredito_pagar','desc');
         $crud->set_relation('idproveedor','proveedor','{nombres} - {ruc}');
         $crud->set_relation('idcompra','compra','N° 000{idcompra}');
         $crud->columns('idcompra','idproveedor','deudainicial', 'saldo');

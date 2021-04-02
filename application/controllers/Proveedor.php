@@ -67,7 +67,7 @@ class Proveedor extends CI_Controller {
         $crud->field_type('idproveedor', 'hidden');
         $crud->field_type('telefono', 'integer');
         $crud->field_type('ruc', 'integer');
-        $crud->required_fields('direccion', 'telefono', 'ruc','nombres', 'correo');
+        $crud->required_fields('direccion', 'telefono', 'ruc','nombres'); 
 
 
 

@@ -53,19 +53,19 @@ class Mercaderia extends CI_Controller {
         $crud->set_crud_url_path(base_url('mercaderia/index'));
 
         $crud->set_table('mercaderia');
-        $crud->columns('idmarca', 'modelo', 'descripcion');
-        $crud->display_as('modelo', 'Modelo')
+        $crud->columns('nombre','idmarca', 'modelo', 'descripcion');
+        $crud->display_as('nombre', 'Nombre de la mercadería')->display_as('modelo', 'Modelo')
         ->display_as('descripcion', 'Descripción')
         ->display_as('idmarca', 'Marca');
 
         
 
-        $crud->add_fields('idmarca', 'modelo', 'descripcion', 'idimportadora');
-        $crud->edit_fields('idmarca', 'modelo', 'descripcion', 'idmercaderia', 'idimportadora');
+        $crud->add_fields('nombre','idmarca', 'modelo', 'descripcion', 'idimportadora');
+        $crud->edit_fields('nombre','idmarca', 'modelo', 'descripcion', 'idmercaderia', 'idimportadora');
 
-        $crud->set_read_fields('idmarca', 'modelo', 'descripcion', 'idimportadora');
+        $crud->set_read_fields('nombre','idmarca', 'modelo', 'descripcion', 'idimportadora');
         $crud->set_relation('idmarca','marca','{nombre}');
-        $crud->required_fields('idmarca','modelo');
+        $crud->required_fields('idmarca','modelo','nombre');
 
         $crud->field_type('descripcion', 'text')
         ->field_type('idmercaderia', 'hidden')

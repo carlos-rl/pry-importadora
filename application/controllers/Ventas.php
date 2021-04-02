@@ -46,10 +46,12 @@ class Ventas extends CI_Controller {
         $crud->unset_add();
         $crud->unset_read();
         $crud->add_action('Mercaderías vendidas','','','fa fa-list', array($this, '_ir_imagen'));
+        $crud->add_action('Exportar factura','','','fa fa-print', array($this, '_ir_print'));
         $crud->set_subject('Ventas');
         $crud->set_crud_url_path(base_url('ventas/index'));
 
         $crud->set_table('venta');
+        $crud->order_by('idventa','desc');
         $crud->columns('idcliente', 'fecha', 'estado_v');
         $crud->display_as('idcliente', 'Detalle del cliente')
         ->display_as('fecha', 'Fecha de la venta')
@@ -61,7 +63,7 @@ class Ventas extends CI_Controller {
         $crud->edit_fields('idcliente', 'fecha', 'idventa');
 
         $crud->set_read_fields('idcliente', 'fecha');
-        $crud->set_relation('idcliente','cliente','{cedula} - {nombres}');
+        $crud->set_relation('idcliente','cliente','{cedula} - {nombres} {apellidos}');
         $crud->required_fields('idcliente','fecha');
 
         $crud->field_type('idventa', 'hidden');
@@ -75,6 +77,10 @@ class Ventas extends CI_Controller {
 
     function _ir_imagen($value, $row) {
 		return base_url().'venta/detalle/'.$row->idventa; 
+    }
+
+    function _ir_print($value, $row) {
+		return base_url().'venta/print/'.$row->idventa; 
     }
     
     function _callback_fecha($value, $row){

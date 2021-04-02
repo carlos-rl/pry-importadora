@@ -1,0 +1,38 @@
+body{
+  font-family: Montserrat,sans-serif;
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+}
+table {
+  width: 100%; border-collapse: collapse;
+}
+td, th {
+  border: solid 0px black;  
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  vertical-align: auto;
+}
+h1 {text-align: center;}
+.right {
+  right: 80px;
+  position: absolute;
+}
+.bold{
+  font-weight: bold;
+  font-size: 20px;
+}
+.imagen{
+  margin-left: -20px;
+  text-align: center;
+}
+
+.table, table.border td, table.border th {
+  border: solid 1px black; 
+  font-size: 10px;
+}
+tr:nth-child(2n) {
+  background-color: #f2f2f2;
+}

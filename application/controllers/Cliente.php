@@ -88,7 +88,7 @@ class Cliente extends CI_Controller {
         ->field_type('idcliente', 'hidden')
         ->field_type('tipo', 'hidden','c');
         
-        $crud->required_fields('direccion', 'telefono', 'correo','nombres','apellidos', 'cedula');
+        $crud->required_fields('direccion', 'telefono','nombres','apellidos', 'cedula');
 
 
 

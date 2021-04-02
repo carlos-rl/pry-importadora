@@ -12,6 +12,10 @@
     <?php $this->load->view('archivos/css') ?>
     <link href="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css">
+    <!-- select2 -->
+    <link href="<?= base_url() ?>static/lib/select2/select2.min.css" rel="stylesheet" media="screen">
+    <link href="<?= base_url() ?>static/lib/select2-bootstrap-theme-master/dist/select2-bootstrap.min.css" rel="stylesheet" media="screen">
+
 </head>
 
 <body>
@@ -90,18 +94,18 @@
                             <div class="col-md-5">
                                 <h2 class="invoice-client mrg10T">Seleccionar mercadería</h2>
                                 <div class="row">
-                                    <div class="col-sm-7">
-                                        <label for="idinventario_mercaderia">Seleccionar Serie - Marca - Modelo </label>
+                                    <div class="col-sm-12">
+                                        <label for="idinventario_mercaderia">Seleccionar Nombre Serie - Marca - Modelo </label>
                                         <select name="idinventario_mercaderia" class="form-control input-sm" id="idinventario_mercaderia"
-                                            style="margin-top:10px">
-                                            <option value="0">Seleccionar Serie - Marca - Modelo</option>
+                                            >
+                                            <option value="0">Seleccionar Nombre, {Serie - Marca - Modelo}</option>
                                             <?php foreach ($idinventario_mercaderia as $key => $x) { ?>
-                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>"><?= $x->serie ?> - <?= $x->nombre ?> - <?= $x->modelo ?></option>
+                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>"><?= $x->nombre ?>, {<?= $x->serie ?> - <?= $x->nombre ?> - <?= $x->modelo ?>}</option>
                                             <?php } ?>
                                               
                                         </select>
                                     </div>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-12" style="margin-top:10px">
                                         <label for="idinventario_mercaderia">Agregar Venta</label>
                                         <button class="btn btn-block btn-info btn-sm" id="add_row" style="margin-top:10px">
                                             Agregar <i class="glyph-icon fa fa-plus"></i>
@@ -119,7 +123,7 @@
                                     <th>Mercadería</th>
                                     <th>Meses de Garantía</th>
                                     <th style="width: 20%;">Precio</th>
-                                    <th colspan="2" style="width: 17%;">Total</th>
+                                    <th colspan="2" style="width: 19%;">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,8 +140,13 @@
                                 <tr class="font-bold font-black">
                                     <td colspan="5"></td>
                                     <td class="text-right">
-                                        <div class="input-group mb-2 mb-sm-0">
-                                            <input type="text" class="form-control" id="tax" value="" placeholder="0">
+                                        <div class="input-group">
+                                            <select name="tax" id="tax" class="form-control">
+                                                <?php for ($i=0; $i < 31 ; $i++) {  ?>
+                                                    <option <?= $i==12?'selected':'' ?> value="<?= $i ?>"><?= $i ?></option>
+                                                    <?php $i++; ?>
+                                                <?php } ?>
+                                            </select>
                                             <div class="input-group-addon">%</div>
                                         </div>
                                     </td>
@@ -183,7 +192,7 @@
                                             <?php $i = 0; foreach ($idcliente as $key => $value) { $i++; ?>
                                                 <tr>
                                                     <td><?= $i ?></td>
-                                                    <td><?= $value->nombres ?></td>
+                                                    <td><?= strtoupper($value->nombres.' '.$value->apellidos) ?></td>
                                                     <td><?= $value->cedula ?></td>
                                                     <td><?= $value->direccion ?></td>
                                                     <td><?= $value->telefono ?></td>
@@ -256,6 +265,35 @@
             </div>
         </div>
 
+        <div id="modal_metodo" class="modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Seleccionar el método de pago</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"><br>
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="contado">
+                                       <i class="fa fa-dollar"></i> Pagar al contado
+                                    </button><br>
+                                </div>
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="credito">
+                                        <i class="fa fa-money"></i> Pagar a crédito
+                                    </button>
+                                </div>
+                            </div><br><br>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- JS Demo -->
         <script src="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
@@ -265,9 +303,13 @@
         <script src="<?= base_url() ?>static/moment/locale/es.js" type="text/javascript"></script>
         <script src="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/Inputmask/dist/jquery.inputmask.js"></script>
-        
+        <!-- select2 -->
+        <script src="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+        <script src="<?= base_url() ?>static/lib/select2/select2.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
         <script>
         $(function() {
+            
             var i_global = 1;
             var idglobal = 1;
 
@@ -288,11 +330,16 @@
             $('#seleccionar_cliente').click(function(){
                 $('#modal_cliente').modal('show');
             });
+
+            $('#idinventario_mercaderia').select2({
+                placeholder: 'Buscar Mercadería',
+                theme: "bootstrap"
+            });
             $('#body_cliente').on('click', 'button[rel="seleccionar"]', function () {
                 var data = $(this).data('json'),
                         json = data.json,
                         id = data.idcliente;
-                $('#nombre').html(json.nombres);
+                $('#nombre').html(json.apellidos+' '+json.nombres);
                 $('#ruc').html(json.cedula);
                 $('#direccion').html(json.direccion);
                 $('#telefono').html(json.telefono);
@@ -457,7 +504,7 @@
             function calc_total() {
                 total = 0;
                 $('.total').each(function() {
-                    total += parseInt($(this).html());
+                    total += parseFloat($(this).html());
                 });
                 $('#sub_total').html('$ '+total.toFixed(2));
                 tax_sum = total / 100 * $('#tax').val();
@@ -489,6 +536,8 @@
                             data: data_add_venta(fechai, tipo, cuotas, idcuentabancaria, pago),
                             dataType: 'JSON',
                             beforeSend: function() {
+                                $('#contado').prop('disabled',true);
+                                $('#credito').prop('disabled',true);
                                 $('.row').find('input, textarea, button, select').prop('disabled',
                                     true);
                                 $('#guardarventa').html(
@@ -497,10 +546,15 @@
                         }).done(function(data) {
                             $('.row').find('input, textarea, button, select').prop('disabled', false);
                             $('#guardarventa').html('<i class="fa fa-check"></i> Tu venta fué guardada con éxito');
-                            alert('Venta guardada');
-                            location.reload();
+                            if(confirm('¿Imprimir factura?')){
+                                window.location = '<?= base_url() ?>venta/print/'+data.idventa;
+                            }else{
+                                location.reload();
+                            }
                             return;
                         }).fail(function() {
+                            $('#contado').prop('disabled',false);
+                            $('#credito').prop('disabled',false);
                             $('.row').find('input, textarea, button, select').prop('disabled', false);
                             $('#guardarventa').html(
                                 '<i class="fa fa-warning"></i> Tus datos no fueron guardados');
@@ -543,11 +597,13 @@
                     if(!existe){
                         alert('Agregar por lo menos 1 producto')
                     }else{
-                        if(confirm('Realizar el pago ¿a crédito?')){
-                            $('#modal_pagos').modal('show');
+                        $('#modal_metodo').modal('show');
+
+                        /**if(confirm('Realizar el pago ¿a crédito?')){
+                            
                         }else{
-                            guardar_venta_('si');
-                        }
+                            
+                        } */
                     }
                     
                 }else{
@@ -555,7 +611,16 @@
                 }
             });
 
+            $('#contado').click(function(){
+                guardar_venta_('si');
+            })
+            $('#credito').click(function(){
+                $('#modal_pagos').modal('show');
+                $('#modal_metodo').modal('hide');
+            })
+
             var data_add_venta = function(fechai, tipo, cuotas, idcuentabancaria, pago){
+                var iva = $('#tax').val();
                 var data = {
                     idcliente:idcliente_g,
                     fecha:fecha_g,
@@ -563,6 +628,7 @@
                     fechai:fechai,
                     tipo:tipo,
                     cuotas:cuotas,
+                    iva:iva,
                     idcuentabancaria:idcuentabancaria,
                     pago:pago
                 }

@@ -318,7 +318,7 @@
                     <h4>Mercadería
                         <?= isset($marca_2->nombre)==false?'':(' - '.$marca_2->nombre.' <a class="label label-danger" href="'.base_url('menu/shop').'">Quitar filtro</a> ') ?>
                     </h4>
-                    <ul class="thumbnails">
+                    <ul class="thumbnails" id="tbody_">
                         <?php foreach ($inventario as $key => $x) { ?>
                         <li class="span3">
                             <div class="thumbnail">
@@ -336,8 +336,7 @@
 
                                         <?php if($this->session->userdata('carrito')!=null){ ?>
                                         <?php if (existeCarrito($x->idinventario_mercaderia)=='1') { ?>
-                                        <a class="btn btn-success disabled">Añadido al
-                                            carrito <i class="icon-shopping-cart"></i></a>
+                                        <a class="btn btn-success disabled">Añadido <i class="icon-shopping-cart"></i></a>
                                         <a href="<?= base_url('menu/delete/'.$x->idinventario_mercaderia) ?>"
                                             class="btn btn-danger"><i class="fa fa-remove"></i></a>
                                         <?php }else{ ?>
@@ -350,7 +349,7 @@
                                             href="<?= base_url('menu/add/'.$x->idinventario_mercaderia) ?>">Agregar al
                                             carrito <i class="icon-shopping-cart"></i></a>
                                         <?php } ?>
-
+                                        <button type="button" rel="action" class="btn btn-info btn-lg" data-json='<?= json_encode($x) ?>' ><i class="icon-list"></i></button>
                                     </h4>
                                 </div>
                             </div>
@@ -359,6 +358,32 @@
 
                     </ul>
 
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="titulo_shop">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                        <div class="">
+                    <div class="col-md-6 product_img">
+                        <img width="190" id="imagen_shop" src="http://img.bbystatic.com/BestBuy_US/images/products/5613/5613060_sd.jpg" class="img-responsive">
+                    </div>
+                    <div class="col-md-6 product_content">
+                        <h4 id="nombre_shop"></h4>
+                        
+                        <p id="descripcion_shop">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <h3 class="cost" id="precio_shop"></h3>
+                        
+                    </div>
+                </div>
+                        </div>
+                        </div>
+
+                    </div>
                 </div>
                 <style>
                 #services {
@@ -479,7 +504,20 @@
 
     <script src="<?= base_url() ?>static/shop/themes/js/bootshop.js"></script>
     <script src="<?= base_url() ?>static/shop/themes/js/jquery.lightbox-0.5.js"></script>
-
+    <script>
+    $(function(){
+        $('#tbody_').on('click', 'button[rel="action"]', function () {
+            var data = $(this).data('json');
+            $('#imagen_shop').attr('src','<?= base_url() ?>'+(data.imagen==null?'static/imagen/img_not.png':data.imagen));
+            $('#nombre_shop').html(data.modelo+' - '+data.nommarca);
+            $('#titulo_shop').html('Descripción del artículo');
+            $('#precio_shop').html('$ '+data.precio_venta);
+            $('#descripcion_shop').html(data.descripcion);
+            
+            $('#myModal').modal('show')
+        })
+    })
+    </script>
 </body>
 
 </html>

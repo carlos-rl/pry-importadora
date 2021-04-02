@@ -12,6 +12,10 @@
     <?php $this->load->view('archivos/css') ?>
     <link href="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<?= base_url() ?>static/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css">
+    
+    <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js" media="print"></script>
+    <link rel="stylesheet" href="<?= base_url() ?>static/print.css" media="print">
+    
 </head>
 
 <body>
@@ -30,10 +34,21 @@
                         <p><?= $subtitle ?></p>
 
                     </div>
-
-                    <div class="content-box pad25A">
+                        <button id="print" class="btn btn-default">
+                            Imprimir
+                        </button>
+                    <div class="content-print" id="">
+                        <table class="table-print">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="content-box pad25A" id="content-imprimir">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-xs-6">
                                 <div class="dummy-logo">
                                     <img src="<?= base_url('static/imagen/importadora.png') ?>" width="75" alt="">
                                 </div>
@@ -45,7 +60,7 @@
                                     <?= $this->session->userdata('idimportadora')->direccion ?>
                                 </address>
                             </div>
-                            <div class="col-sm-6 float-right text-right">
+                            <div class="col-sm-6 col-xs-6 float-right text-right">
                                 <h4 class="invoice-title">Compra</h4>
                                 No. <b>#<?= str_pad($idcompra_after, 8, "0", STR_PAD_LEFT) ?></b>
                                 <div class="divider"></div>
@@ -63,9 +78,9 @@
                         <div class="divider"></div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-sm-4 col-xs-6">
                                 <h2 class="invoice-client mrg10T">Información del cliente:</h2>
-                                <h5><label for=""><label for="" id="nombre"><?= $idcliente->nombres ?> </label></label> </h5>
+                                <h5><label for=""><label for="" id="nombre"><?= $idcliente->apellidos ?> <?= $idcliente->nombres ?> </label></label> </h5>
                                 <address class="invoice-address">
                                     <p for="" id="ruc"><?= $idcliente->cedula ?></p>
                                     <p for="" id="direccion"><?= $idcliente->direccion ?></p>
@@ -73,7 +88,7 @@
                                 </address>
                                 <input type="hidden" id="idproveedor" value="<?= $idcliente->idcliente ?>">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4 col-xs-6">
                                 <h2 class="invoice-client mrg10T">Información de la venta:</h2>
                                 <ul class="reset-ul">
                                     <li style="display: flex;"><b>Fecha:</b> <span><?= $idcliente->fecha ?></span></li>
@@ -90,14 +105,13 @@
                             </div>
                             
                         </div>
-
                         <table class="table mrg20T table-hover" id="tab_logic">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Serie</th>
                                     <th>Mercadería</th>
-                                    <th>Meses de Garantía</th>
+                                    <th>Meses de Garantía</th><!---->
                                     <th class="text-center">Costo</th>
                                     <th>Precio al público</th>
                                     <th colspan="2">Total</th>
@@ -110,10 +124,14 @@
                                 <tr id='addr1'></tr>
                             </tbody>
                             <tfoot>
-                                <tr class="font-bold font-black" style="display:none">
+                                <tr class="font-bold font-black">
                                     <td colspan="6" class="text-right">Subtotal:</td>
                                     <td colspan="3" id="sub_total">$0.00</td>
-                                    <input type="hidden" class="form-control" id="tax" value="0" placeholder="0">
+                                </tr>
+                                <tr class="font-bold font-black">
+                                    <td colspan="6" class="text-right">IVA:</td>
+                                    <td colspan="3" id="iva_subtotal">$0.00</td>
+                                    <input type="hidden" class="form-control" id="tax" value="<?= $idcliente->iva ?>" placeholder="0">
                                 </tr>
                                 <tr class="font-bold font-black">
                                     <td colspan="6" class="text-right">TOTAL:</td>
@@ -195,6 +213,34 @@
 
             </div>
         </div>
+        <div id="modal_metodo" class="modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Seleccionar el método de pago</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid"><br>
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="contado">
+                                       <i class="fa fa-dollar"></i> Pagar al contado
+                                    </button><br>
+                                </div>
+                                <div class="col-md-12" align="center">
+                                    <button class="btn btn-primary btn-block" id="credito">
+                                        <i class="fa fa-money"></i> Pagar a crédito
+                                    </button>
+                                </div>
+                            </div><br><br>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
@@ -205,6 +251,33 @@
         
         <script>
         $(function() {
+            $('#print').click(function(){
+                var printVersion = $('#content-imprimir').clone();
+                // Eliminamos los elementos indeseables a través de jQuery. En este caso sólo uno.
+                //printVersion.children().remove(".contactFloatLayer");
+            
+                // Creamos el contenido del documento que se va a imprimir.
+                var printContent = $('head').html() + '<div class="printVersion">' + printVersion.html() + '</div>'; 
+
+                // Establecemos la nueva ventana.
+                var windowUrl = 'about:blank'; 
+                var createdAt = new Date(); 
+                var windowName = 'printScreen' + createdAt.getTime(); 
+                var printWindow = window.open(windowUrl, windowName, 'resizable=1,scrollbars=1,left=500,top=000,width=868'); 
+                printWindow.document.write('<b>REPORTE DE CLIENTES</b><br><br>'+printContent); 
+
+                printWindow.document.close(); 
+            
+                // Establecemos el foco.
+                printWindow.focus(); 
+                setTimeout(function () {
+                    printWindow.print();
+                }, 1000);
+            })
+
+            
+
+
             var i_global = 1;
             var idglobal = 1;
             $('#fechai').datetimepicker({
@@ -212,6 +285,7 @@
             });
             $('#fechai').data("DateTimePicker").minDate("<?= $idcliente->fecha ?>");
 
+            $('#fecha, #fechai').val(moment().format('YYYY-MM-DD'));
             $('#seleccionar_proveedor').click(function(){
                 $('#modal_proveedor').modal('show');
             });
@@ -352,10 +426,11 @@
                 total_g = 0;
                 total = 0;
                 $('.total').each(function() {
-                    total += parseInt($(this).html());
-                    total_g += parseInt($(this).html());
+                    total += parseFloat($(this).html());
+                    total_g += parseFloat($(this).html());
                 });
                 $('#sub_total').html('$ '+total.toFixed(2));
+                $('#iva_subtotal').html('$ '+(total*($('#tax').val()/100)).toFixed(2)+' ('+<?= $idcliente->iva ?>+'%)');
                 tax_sum = total / 100 * $('#tax').val();
                 $('#tax_amount').html('$'+tax_sum.toFixed(2));
                 $('#total_amount').html('$'+(tax_sum + total).toFixed(2));
@@ -388,12 +463,12 @@
             var idproveedor_g = '';
             var fecha_g = '';
             var detalle_g = [];
-            
-            $('#guardarventa').click(function(){
+            var guardarventa_= function(pago){
                 var idventa = <?= $idcompra_after ?>;
                 var fechai = $('#fechai').val();
                 var tipo = $('#tipo').val();
                 var cuotas = $('#cuotas').val();
+                var iva = $('#tax').val();
                 var idcuentabancaria = $('#idcuentabancaria').val();
 
                 $.ajax({
@@ -403,6 +478,8 @@
                         idventa:idventa,
                         total:total_g,
                         fechai:fechai,
+                        pago:pago,
+                        iva:iva,
                         idcliente:<?= $idcliente->idcliente ?>,
                         tipo:tipo,
                         cuotas:cuotas,
@@ -418,8 +495,11 @@
                 }).done(function(data) {
                     $('.row').find('input, textarea, button, select').prop('disabled', false);
                     $('#guardarventa').html('<i class="fa fa-check"></i> Tu venta fué guardada con éxito');
-                    alert('Venta guardada');
-                    location.reload();
+                    if(confirm('¿Imprimir factura?')){
+                        window.location = '<?= base_url() ?>venta/print/'+data.idventa;
+                    }else{
+                        location.reload();
+                    }
                     return;
                 }).fail(function() {
                     $('.row').find('input, textarea, button, select').prop('disabled', false);
@@ -430,13 +510,22 @@
                             '<i class="fa fa-save"></i> Crear Registro');
                     }, 2000);
                 });
+            }
+            $('#guardarventa').click(function(){
+                guardarventa_('no');
             });
             $('#guardar_venta').click(function(){
                 calc_total();
-                $('#modal_pagos').modal('show');
-                
-
+                $('#modal_metodo').modal('show');
             });
+
+            $('#contado').click(function(){
+                guardarventa_('si');
+            })
+            $('#credito').click(function(){
+                $('#modal_pagos').modal('show');
+                $('#modal_metodo').modal('hide');
+            })
             
         });
         </script>

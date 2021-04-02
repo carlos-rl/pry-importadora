@@ -41,10 +41,9 @@
                                 <div class="col-md-3">
                                     <a href="<?= base_url('compras') ?>" title="Compas"
                                         class="tile-box tile-box-shortcut btn-danger">
-                                        <span
-                                            class="bs-badge badge-absolute"><?= str_pad($numcompra, 8, "0", STR_PAD_LEFT) ?></span>
+                                        <span class="bs-badge badge-absolute"><?= str_pad($numcompra, 8, "0", STR_PAD_LEFT) ?></span>
                                         <div class="tile-header">
-                                            Compas
+                                            Compras
                                         </div>
                                         <div class="tile-content-wrapper">
                                             <i class="glyph-icon fa fa-dollar"></i>
@@ -67,7 +66,7 @@
                                 <div class="col-md-3">
                                     <a href="<?= base_url('cliente') ?>" title="Clientes"
                                         class="tile-box tile-box-shortcut btn-info">
-
+                                        <span class="bs-badge badge-absolute"><?= str_pad($numcliente-1, 8, "0", STR_PAD_LEFT) ?></span>   
                                         <div class="tile-header">
                                             Clientes
                                         </div>
@@ -79,6 +78,8 @@
                                 <div class="col-md-3">
                                     <a href="<?= base_url('proveedor') ?>" title="Proveedores"
                                         class="tile-box tile-box-shortcut btn-warning">
+                                        <span class="bs-badge badge-absolute"><?= str_pad($numproveedor, 8, "0", STR_PAD_LEFT) ?></span>   
+
                                         <div class="tile-header">
                                             Proveedores
                                         </div>

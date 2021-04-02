@@ -36,6 +36,9 @@
         margin: 0px 4px;
         font-weight: bold;
     }
+    #form-button-save{
+        display:none
+    }
     </style>
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>static/date.css">
     <link href="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
@@ -71,7 +74,11 @@
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
         <script src="<?= base_url() ?>static/touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
-
+        <script>
+        $(function(){
+           
+        })
+        </script>
     </div>
 </body>
 

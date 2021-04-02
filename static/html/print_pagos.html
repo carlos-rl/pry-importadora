@@ -1,0 +1,24 @@
+      
+      <h1>Pagos {{num_v}}</h1>
+      
+      <table class="border">
+        <thead>
+          <tr>
+            <th align="left" style="width: 5%;">#</th>
+            <th align="left">Fecha de pago</th>
+            <th align="left" style="width: 15%;">Valor de cuota</th>
+            <th align="left" style="width: 10%;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{table_row}}   
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="bold">Total</td>
+                <td class="bold">$ {{total}}</td>
+            </tr> 
+        </tfoot>
+      </table>

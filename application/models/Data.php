@@ -330,7 +330,7 @@ class Data extends CI_Model {
 
     public function compra_mercaderia() {
         try {
-            $this->db->select('m.idmercaderia, m.modelo, ma.nombre');
+            $this->db->select('m.idmercaderia, m.modelo, ma.nombre, m.nombre as mercaderia');
             $this->db->from('mercaderia m');
             $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
 			$this->db->order_by('ma.nombre asc');
@@ -381,7 +381,7 @@ class Data extends CI_Model {
 
     public function compra_proveedor_buscar($idcompra) {
         try {
-            $this->db->select('c.idcompra, c.fecha, c.idproveedor, p.nombres, p.ruc, p.direccion, p.telefono');
+            $this->db->select('c.idcompra, c.fecha, c.idproveedor, p.nombres, p.ruc, p.direccion, p.telefono, c.iva');
             $this->db->from('compra c');
             $this->db->join('proveedor p', 'p.idproveedor = c.idproveedor');
             $this->db->where('c.idcompra',$idcompra);
@@ -413,7 +413,7 @@ class Data extends CI_Model {
 
     public function buscar_mercaderia($idmercaderia) {
         try {
-            $this->db->select('ma.nombre, m.modelo');
+            $this->db->select('ma.nombre, m.modelo, m.nombre as mercaderia');
             $this->db->from('mercaderia m');
             $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
             $this->db->where('m.idmercaderia',$idmercaderia);
@@ -430,7 +430,7 @@ class Data extends CI_Model {
             $this->db->select('m.modelo, inv.idinventario_mercaderia, inv.serie');
             $this->db->from('inventario_mercaderia inv');
             $this->db->join('mercaderia m', 'm.idmercaderia = inv.idmercaderia');
-            $this->db->where('inv.estado','1');
+            $this->db->where('inv.estado_inv','1');
 			$this->db->order_by('m.modelo asc');
             $resultado = $this->db->get();
             return $resultado->result();
@@ -502,7 +502,6 @@ class Data extends CI_Model {
             $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
 			$this->db->order_by('inv.serie asc');
             $this->db->where('inv.estado_inv = 1');
-            $this->db->where('inv.estado_inv <> 2');
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -544,7 +543,7 @@ class Data extends CI_Model {
 
     public function venta_cliente_buscar($idventa) {
         try {
-            $this->db->select('c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, c.estado_v');
+            $this->db->select('p.apellidos, c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, c.estado_v, c.iva');
             $this->db->from('venta c');
             $this->db->join('cliente p', 'p.idcliente = c.idcliente');
             $this->db->where('c.idventa',$idventa);
@@ -558,7 +557,7 @@ class Data extends CI_Model {
 
     public function buscarcreditopagar_venta($id) {
         try {
-            $this->db->select('c.nombres, c.cedula, cp.deudainicial, cp.saldo, cp.idventa,cp.idcredito, c.idcliente');
+            $this->db->select('c.apellidos, c.nombres, c.cedula, cp.deudainicial, cp.saldo, cp.idventa,cp.idcredito, c.idcliente');
             $this->db->from('credito cp');
             $this->db->join('venta p', 'p.idventa = cp.idventa');
             $this->db->join('cliente c', 'c.idcliente = p.idcliente');
@@ -602,10 +601,10 @@ class Data extends CI_Model {
 /**FIN VENTAS */
     public function numTabla($tabla) {
         try {
-            $this->db->select('*');
+            $this->db->select('count(*)as total');
             $this->db->from($tabla);
             $resultado = $this->db->get();
-            return $resultado->num_rows();
+            return $resultado->row()->total;
         } catch (Exception $ex) {
             return $ex->getMessage();
         }
@@ -613,12 +612,14 @@ class Data extends CI_Model {
 
     public function listarinventario_devolver_venta() {
         try {
-            $this->db->select('vm.idventa, m.modelo, inv.idinventario_mercaderia, inv.serie');
+            $this->db->select('vm.idventa, m.modelo, inv.idinventario_mercaderia, inv.serie, m.nombre');
             $this->db->from('venta_mercaderia vm');
             $this->db->join('inventario_mercaderia inv', 'inv.idinventario_mercaderia = vm.idinventario_mercaderia');
             $this->db->join('mercaderia m', 'm.idmercaderia = inv.idmercaderia');
             //$this->db->where('vm.idinventario_mercaderia in (select inv2.idinventario_mercaderia from inventario_mercaderia inv2)');
 			$this->db->order_by('m.modelo asc');
+            $this->db->where('inv.estado_inv', 2);
+
             $resultado = $this->db->get();
             return $resultado->result();
         } catch (Exception $ex) {
@@ -675,7 +676,7 @@ class Data extends CI_Model {
 
     public function listarDetalleInventarioWeb_id($idmarca) {
         try {
-            $this->db->select('me.modelo, (select im.foto from imagen im where im.idmercaderia = me.idmercaderia order by rand() limit 1) as imagen, m.nombre as nommarca, m.idmarca, d.idinventario_mercaderia, d.serie, d.costo, d.precio_venta, d.garantia_meses');
+            $this->db->select('me.descripcion, me.modelo, (select im.foto from imagen im where im.idmercaderia = me.idmercaderia order by rand() limit 1) as imagen, m.nombre as nommarca, m.idmarca, d.idinventario_mercaderia, d.serie, d.costo, d.precio_venta, d.garantia_meses');
             $this->db->from('inventario_mercaderia d');
             $this->db->join('mercaderia me', 'me.idmercaderia = d.idmercaderia');
             $this->db->join('marca m', 'm.idmarca = me.idmarca');
@@ -1079,6 +1080,54 @@ class Data extends CI_Model {
             $resultado = $this->db->get();
             $resultado = isset($resultado->row()->total)?$resultado->row()->total:0;
             return  $resultado > 2?'Crédito - # pagos: '.$resultado:'Al contado';
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function clienteVenta($idventa) {
+        try {
+            $this->db->select('v.fecha, v.iva, c.nombres, c.apellidos, c.cedula, c.telefono, c.correo');
+            $this->db->from('venta v');
+            $this->db->join('cliente c', 'c.idcliente = v.idcliente');
+            $this->db->where('v.idventa',$idventa);
+            $resultado = $this->db->get();
+            return $resultado->row();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function venta_inventario_informe_print($idventa) {
+        try {   
+            $this->db->select('vd.idventa_mercaderia, vd.precio, i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
+            ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, p.apellidos');
+            $this->db->from('venta_mercaderia vd');
+            $this->db->join('venta c', 'c.idventa = vd.idventa');
+            $this->db->join('inventario_mercaderia i', 'i.idinventario_mercaderia = vd.idinventario_mercaderia');
+            $this->db->join('mercaderia m', 'i.idmercaderia = m.idmercaderia');
+            $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
+            $this->db->join('cliente p', 'p.idcliente = c.idcliente');
+            $this->db->where('c.idventa',$idventa);
+            
+			$this->db->order_by('c.fecha asc');
+            $resultado = $this->db->get();
+            return $resultado->result();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function buscarpagodeuda_venta_print($id) {
+        try {
+            $this->db->select('pd.idcredito, pd.idamortizacion_cuotas, pd.fechapagar, pd.fechapagado, pd.valorcuota, pd.valorabonado, pd.recargo, pd.estado, pd.saldo');
+            $this->db->from('amortizacion_cuotas pd');
+            $this->db->join('credito c', 'c.idcredito = pd.idcredito');
+            $this->db->join('venta v', 'c.idventa = v.idventa');
+            $this->db->where('v.idventa',$id);
+			$this->db->order_by('pd.fechapagar asc');
+            $resultado = $this->db->get();
+            return $resultado->result();
         } catch (Exception $ex) {
             return $ex->getMessage();
         }

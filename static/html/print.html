@@ -1,0 +1,105 @@
+      <table style="width: 590px;border-width: 1px;">
+        <tr>
+          <td width="40%">
+            <table>
+              <tr>
+                <td>
+                  <img src="{{imagen}}" width="220" class="imagen" alt=""><br>
+                </td>
+                
+              </tr>
+            </table>
+          </td>
+          <td width="50%"></td>
+            <td width="60%">
+              
+              <table class="table">
+                <tr>
+                  <td width="60%">
+                    <b>Datos de la importadora</b><br>
+                    {{impor_nombre}}<br>
+                    {{impor_ruc}}<br>
+                    {{impor_direccion}} | {{impor_telefono}}<br>
+                    <b>Factura.</b> {{report_nombre}} <br>
+                    <div style="font-size: 10px;">{{fecha_hoy}}</div>
+                  </td>
+                  <td>
+                    <b>Datos del cliente</b><br>
+                    {{nombre_cliente}}<br>
+                    {{cedula_cliente}}<br>
+                    {{correo_cliente}} | {{telefono_cliente}}<br>
+                    <b>Tipo de pago.</b><br> {{escredito}}
+                  </td>
+                </tr>
+              </table>
+            </td>
+        </tr>
+      </table>
+      
+      <div class="right">
+        
+      </div>
+      
+      <div>
+        
+        
+        <!---<b>Customer</b>
+        {{ invoice.contact.name }}<br>
+        {{ invoice.contact.post_address | multi_line }}--->
+      </div>
+      <br>
+      <h1>FACTURA {{num_v}}</h1>
+      
+      <table class="border">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>N° Venta</th>
+            <th>Fecha de venta</th>
+            <th>Serie</th>
+            <th>Mercadería</th>
+            <th>Meses de Garantía</th>
+            <th>Cliente</th>
+            <th class="text-center">Precio al público</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{table_row}}   
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="bold">SubTotal</td>
+                <td class="bold">$ {{subtotal}}</td>
+            </tr> 
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="bold">IVA {{iva}} %</td>
+              <td class="bold">$ {{total_iva}}</td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="bold">Total</td>
+            <td class="bold">$ {{total}}</td>
+        </tr> 
+        </tfoot>
+      </table>

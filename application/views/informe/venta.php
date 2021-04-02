@@ -78,7 +78,8 @@
                                     </h3>
                                     <div class="example-box-wrapper">
                                         <ul class="nav nav-pills">
-                                            <li class="active"><a href="#" data-toggle="modal"
+                                            <li class="active">
+											<a href="#" data-toggle="modal"
                                                     data-target="#modal_buscar"><i class="fa fa-filter"></i> Cambiar filtros</a></li>
                                             <li>
                                                 <a href="#" id="exportar"><i class="fa fa-file-pdf-o"></i> Exportar como PDF</a>
@@ -183,6 +184,9 @@
         <script>
         $(function() {
             //$('#modal_buscar').modal('show')
+            function formatMoney(number) {
+                return parseFloat(number).toFixed(2);
+            }
             var idcliente = 0;
             var fechai = '';
             var fechaf = '';
@@ -210,6 +214,7 @@
                     var total = 0;
                     for(var i in data){
                         var d = data[i];
+                        d.precio_venta = parseFloat(formatMoney(d.precio_venta));
                         var html = '<tr>';
                         html +='<th scope="row">'+ (i*1+1) +'</th>';
                         html +='<td class="">V-00000'+(d.idventa).toUpperCase()+' </td>';
@@ -218,13 +223,13 @@
                         html +='<td class="">'+((d.modelo).toUpperCase()+' - <small>'+(d.nombre).toUpperCase()+'</small>')+'</td>';
                         html +='<td class="">'+''+(d.garantia_meses).toUpperCase()+' mes(es)</td>';
                         html +='<td class="">'+((d.nombres).toUpperCase()+' - <small>'+(d.cedula==null?'--':d.cedula).toUpperCase()+'</small>')+'</td>';
-                        html +='<td class="">$ '+(d.precio_venta).toUpperCase()+'</td>';
-                        html +='<td class="">$ '+(d.precio_venta).toUpperCase()+'</td>';
+                        html +='<td class="">$ '+(d.precio_venta)+'</td>';
+                        html +='<td class="">$ '+(d.precio_venta)+'</td>';
                         html +='</tr>';
                         $("#tbody_").append(html);
                         total = total + parseFloat(d.precio_venta);
                     }
-                    $("#total_amount").html('$'+ (total).toFixed(2));
+                    $("#total_amount").html('$'+ new Intl.NumberFormat("de-DE").format(total));
                     if(data.length < 1){
                         $('#tbody_').html('<tr> <td colspan="9">Ningún dato en la tabla</td>');
                     }
