@@ -95,7 +95,7 @@
                                                     <th>Mercadería</th>
                                                     <th>Meses de Garantía</th>
                                                     <th>Cliente</th>
-                                                    <th class="text-center">Precio al público</th>
+                                                    <th class="text-center">Precio de venta</th>
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
@@ -214,20 +214,20 @@
                     var total = 0;
                     for(var i in data){
                         var d = data[i];
-                        d.precio_venta = parseFloat(formatMoney(d.precio_venta));
+                        d.precio = parseFloat(formatMoney(d.precio));
                         var html = '<tr>';
                         html +='<th scope="row">'+ (i*1+1) +'</th>';
                         html +='<td class="">V-00000'+(d.idventa).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.fecha).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.serie).toUpperCase()+'</td>';
-                        html +='<td class="">'+((d.modelo).toUpperCase()+' - <small>'+(d.nombre).toUpperCase()+'</small>')+'</td>';
+                        html +='<td class="">'+(d.mercaderia).toUpperCase()+', '+((d.modelo).toUpperCase()+' - <small>'+(d.nombre).toUpperCase()+'</small>')+'</td>';
                         html +='<td class="">'+''+(d.garantia_meses).toUpperCase()+' mes(es)</td>';
                         html +='<td class="">'+((d.nombres).toUpperCase()+' - <small>'+(d.cedula==null?'--':d.cedula).toUpperCase()+'</small>')+'</td>';
-                        html +='<td class="">$ '+(d.precio_venta)+'</td>';
-                        html +='<td class="">$ '+(d.precio_venta)+'</td>';
+                        html +='<td class="">$ '+(d.precio)+'</td>';
+                        html +='<td class="">$ '+(d.precio)+'</td>';
                         html +='</tr>';
                         $("#tbody_").append(html);
-                        total = total + parseFloat(d.precio_venta);
+                        total = total + parseFloat(d.precio);
                     }
                     $("#total_amount").html('$'+ new Intl.NumberFormat("de-DE").format(total));
                     if(data.length < 1){

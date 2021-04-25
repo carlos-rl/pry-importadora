@@ -297,18 +297,18 @@ class Venta extends CI_Controller {
                 $total = 0;
                 $b = 0;
                 foreach ($dat as $x):
-                    $total = $total + $x->precio_venta;
+                    $total = $total + $x->precio;
                     $b++;
                     $htmlTable .= '<tr class="service">';
                     $htmlTable .= '<td class="tableitem">' . $b .'</td>';
                     $htmlTable .= '<td class="tableitem">V-' . str_pad($x->idventa, 8, "0", STR_PAD_LEFT) .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->fecha .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->serie .'</td>';
-                    $htmlTable .= '<td class="tableitem">' . $x->modelo .' ' . $x->nombre .'</td>';
+                    $htmlTable .= '<td class="tableitem">' . $x->mercaderia .' - ' . $x->modelo .', ' . $x->nombre .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->garantia_meses .' mes(es)</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->nombres . ' - ' . $x->cedula . '</td>';
-                    $htmlTable .= '<td class="tableitem">$ ' . $x->precio_venta .'</td>';
-                    $htmlTable .= '<td class="tableitem">$ ' . $x->precio_venta .'</td>';
+                    $htmlTable .= '<td class="tableitem">$ ' . $x->precio .'</td>';
+                    $htmlTable .= '<td class="tableitem">$ ' . $x->precio .'</td>';
                     $htmlTable .= '</tr>';
                 endforeach;
                 if(count($dat)==0){
@@ -357,7 +357,7 @@ class Venta extends CI_Controller {
 
                 $htmlPage = str_ireplace('{{fecha_hoy}}', $fecha, $htmlPage);
                 
-                $htmlPage = str_ireplace('{{nombre_cliente}}', $cliente->apellidos.' '.$cliente->nombres, $htmlPage);
+                $htmlPage = str_ireplace('{{nombre_cliente}}', $cliente->mercaderia.' - '.$cliente->apellidos.', '.$cliente->nombres, $htmlPage);
                 $htmlPage = str_ireplace('{{cedula_cliente}}', $cliente->cedula, $htmlPage);
                 $htmlPage = str_ireplace('{{correo_cliente}}', $cliente->correo, $htmlPage);
                 $htmlPage = str_ireplace('{{telefono_cliente}}', $cliente->telefono, $htmlPage);
@@ -381,7 +381,7 @@ class Venta extends CI_Controller {
                     $htmlTable .= '<td class="tableitem">V-' . str_pad($x->idventa, 8, "0", STR_PAD_LEFT) .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->fecha .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->serie .'</td>';
-                    $htmlTable .= '<td class="tableitem">' . $x->modelo .' ' . $x->nombre .'</td>';
+                    $htmlTable .= '<td class="tableitem">' . $x->mercaderia .' - ' . $x->modelo .', ' . $x->nombre .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->garantia_meses .' mes(es)</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->apellidos . ' ' . $x->nombres . ' - ' . $x->cedula . '</td>';
                     $htmlTable .= '<td class="tableitem">$ ' . $x->precio .'</td>';

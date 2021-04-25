@@ -100,7 +100,7 @@
                                             >
                                             <option value="0">Seleccionar Nombre, {Serie - Marca - Modelo}</option>
                                             <?php foreach ($idinventario_mercaderia as $key => $x) { ?>
-                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>"><?= $x->nombre ?>, {<?= $x->serie ?> - <?= $x->nombre ?> - <?= $x->modelo ?>}</option>
+                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>"><?= $x->nombre ?>, {<?= $x->serie ?> - <?= $x->marca ?> - <?= $x->modelo ?>}</option>
                                             <?php } ?>
                                               
                                         </select>

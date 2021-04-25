@@ -287,9 +287,9 @@ class Compra extends CI_Controller {
                     $htmlTable .= '<td class="tableitem">C-' . str_pad($x->idcompra, 8, "0", STR_PAD_LEFT) .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->fecha .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->serie .'</td>';
-                    $htmlTable .= '<td class="tableitem">' . $x->modelo .' ' . $x->nombre .'</td>';
+                    $htmlTable .= '<td class="tableitem">' . $x->mercaderia . ', ' . $x->modelo .' ' . $x->nombre .'</td>';
                     $htmlTable .= '<td class="tableitem">' . $x->garantia_meses .' mes(es)</td>';
-                    $htmlTable .= '<td class="tableitem">' . $x->nombres . ' - ' . $x->ruc . '</td>';
+                    $htmlTable .= '<td class="tableitem"> ' . $x->nombres . ' - ' . $x->ruc . '</td>';
                     $htmlTable .= '<td class="tableitem">$ ' . $x->costo .'</td>';
                     $htmlTable .= '<td class="tableitem">$ ' . $x->precio_venta .'</td>';
                     $htmlTable .= '<td class="tableitem">$ ' . $x->costo .'</td>';
@@ -304,7 +304,7 @@ class Compra extends CI_Controller {
                 //echo $htmlPage ;
                 $htmlPage = str_ireplace('{{total}}', round($total,2), $htmlPage);
                 $mpdf->writeHTML($htmlPage, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->Output('Informe de compras' . $fecha . '.pdf', 'D');
+                $mpdf->Output('Informe de compras' . $fecha . '.pdf', 'I');
             } catch (Exception $ex) {
                 echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
             }

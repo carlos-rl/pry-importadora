@@ -216,7 +216,7 @@
                         html +='<td class="">C-00000'+(d.idcompra).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.fecha).toUpperCase()+' </td>';
                         html +='<td class="">'+(d.serie).toUpperCase()+'</td>';
-                        html +='<td class="">'+((d.modelo).toUpperCase()+' - <small>'+(d.nombre).toUpperCase()+'</small>')+'</td>';
+                        html +='<td class="">'+((d.mercaderia+', '+d.modelo).toUpperCase()+' - <small>'+(d.nombre).toUpperCase()+'</small>')+'</td>';
                         html +='<td class="">'+''+(d.garantia_meses).toUpperCase()+' mes(es)</td>';
                         html +='<td class="">'+((d.nombres).toUpperCase()+' - <small>'+(d.ruc==null?'--':d.ruc).toUpperCase()+'</small>')+'</td>';
                         html +='<td class="">$ '+(d.costo).toUpperCase()+'</td>';

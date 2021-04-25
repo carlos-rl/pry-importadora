@@ -81,7 +81,7 @@
                     this.value = this.value.replace(/[^0-9]/g,'');
                 });
                 $('#correo').on('input',function(){ 
-                    this.value = this.value.replace(/[^a-zA-Z@.ñÑáéíóúÁÉÍÓÚ0-9\s]/g,'');
+                    this.value = this.value.replace(/[^a-zA-Z@._ñÑáéíóúÁÉÍÓÚ0-9-\s]/g,'');
                 });
             })
         </script>

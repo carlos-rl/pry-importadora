@@ -106,8 +106,15 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="email">Correo <span class="text-muted"></span></label>
-                            <input type="email" class="form-control" required value="" id="email" name="email" placeholder="you@example.com">
+                            <label for="email">Correo <span class="text-muted">(Optional)</span></label>
+                            <input type="email" class="form-control"  value="" id="email" name="email" placeholder="you@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-12 mb-3">
+                            <label for="email">Cédula <span class="text-muted"></span></label>
+                            <input type="text" maxlength="10" required class="form-control"  value="" id="cedula" name="cedula" placeholder="00000000">
                             <div class="invalid-feedback">
                                 Please enter a valid email address for shipping updates.
                             </div>
@@ -167,7 +174,10 @@
                 this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
             });
             $('#direccion').on('input',function(){ 
-                this.value = this.value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g,'');
+                this.value = this.value.replace(/[^0-9a-zA-ZñÑáéíóúÁÉÍÓÚ@._-\s]/g,'');
+            });
+            $('#cedula').on('input',function(){ 
+                this.value = this.value.replace(/[^0-9]/g,'');
             });
         })
     </script>

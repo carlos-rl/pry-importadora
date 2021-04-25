@@ -496,7 +496,7 @@ class Data extends CI_Model {
 
     public function venta_mercaderia() {
         try {
-            $this->db->select('inv.garantia_meses, inv.precio_venta, inv.idinventario_mercaderia, m.idmercaderia, m.modelo, ma.nombre, inv.serie');
+            $this->db->select('m.nombre, inv.garantia_meses, inv.precio_venta, inv.idinventario_mercaderia, m.idmercaderia, m.modelo, ma.nombre as marca, inv.serie');
             $this->db->from('inventario_mercaderia inv');
             $this->db->join('mercaderia m', 'inv.idmercaderia = m.idmercaderia');
             $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
@@ -723,6 +723,19 @@ class Data extends CI_Model {
         }
     }
 
+    public function buscar_clientec($cedula) {
+        try {
+            $this->db->select('*');
+            $this->db->from('cliente c');
+            $this->db->where('c.cedula', $cedula);
+            $consulta = $this->db->get();
+            $resultado = $consulta->row();
+            return $resultado;
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
     public function buscargrupo($idgrupo) {
         try {
             $this->db->select('pa.url, d.iddetallegrupo, d.idpagina, pa.nombre, d.estado, d.editar, d.crear, d.eliminar, d.ver, d.listar, d.export');
@@ -783,7 +796,7 @@ class Data extends CI_Model {
     public function venta_inventario_informe($idcliente, $fechai, $fechaf) {
         try {   
             $this->db->select('vd.idventa_mercaderia, vd.precio, i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
-            ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono');
+            ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, m.nombre as mercaderia');
             $this->db->from('venta_mercaderia vd');
             $this->db->join('venta c', 'c.idventa = vd.idventa');
             $this->db->join('inventario_mercaderia i', 'i.idinventario_mercaderia = vd.idinventario_mercaderia');
@@ -869,7 +882,7 @@ class Data extends CI_Model {
 
     public function compra_inventario_informe($idproveedor, $fechai, $fechaf) {
         try {   
-            $this->db->select('i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
+            $this->db->select('m.nombre as mercaderia, i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
             ,c.idcompra, c.fecha, c.idproveedor, p.nombres, p.ruc, p.direccion, p.telefono');
             $this->db->from('inventario_mercaderia i');
             $this->db->join('mercaderia m', 'i.idmercaderia = m.idmercaderia');
@@ -1101,7 +1114,7 @@ class Data extends CI_Model {
     public function venta_inventario_informe_print($idventa) {
         try {   
             $this->db->select('vd.idventa_mercaderia, vd.precio, i.idinventario_mercaderia , i.serie, i.costo, i.precio_venta, i.garantia_meses, i.estado_inv, i.idmercaderia, m.modelo, ma.nombre
-            ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, p.apellidos');
+            ,c.idventa, c.fecha, c.idcliente, p.nombres, p.cedula, p.direccion, p.telefono, p.apellidos,m.nombre as mercaderia');
             $this->db->from('venta_mercaderia vd');
             $this->db->join('venta c', 'c.idventa = vd.idventa');
             $this->db->join('inventario_mercaderia i', 'i.idinventario_mercaderia = vd.idinventario_mercaderia');

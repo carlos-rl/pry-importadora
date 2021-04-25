@@ -234,12 +234,13 @@ class Menu extends CI_Controller {
     private function addcliente($post){
         $this->Data->tabla = 'cliente';
         $this->Data->id = 'idcliente';
-        $cliente = $this->Data->buscar_cliente($post->email);
+        $cliente = $this->Data->buscar_clientec($post->cedula);
         if(!isset($cliente->idcliente)){
             $data = array(
                 'nombres' => strtoupper($post->nombres),
                 'telefono' => $post->telefono,
                 'correo' => $post->email,
+                'cedula' => $post->cedula,
                 'direccion' => $post->direccion,
                 'idgrupo' => 2,
                 'idlogin' => 0,
@@ -253,7 +254,8 @@ class Menu extends CI_Controller {
                 'nombres' => strtoupper($post->nombres),
                 'telefono' => $post->telefono,
                 'correo' => strtolower($post->email),
-                'direccion' => $post->direccion
+                'direccion' => $post->direccion,
+                'cedula' => $post->cedula
             ), $cliente->idcliente);
             return $cliente->idcliente;
         }
