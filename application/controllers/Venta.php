@@ -85,7 +85,8 @@ class Venta extends CI_Controller {
             $total = 0;
             for ($i = 0; $i < count($detalle); $i++) {
                 $ins = $detalle[$i];
-                $sql .= '(' . $idventa . ', "' . $ins->idinventario_mercaderia. '", ' . $ins->precio_venta . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+                $sql .= '(' . $idventa . ', "' . $ins->idinventario_mercaderia. '", ' . $ins->precio_venta . ')' . 
+                ((count($detalle) == $i + 1) ? ' ' : ' ,');
                 $total = $total + $ins->precio_venta;
             }
             $this->Data->sql($sql);
