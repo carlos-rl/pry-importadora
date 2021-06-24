@@ -94,20 +94,16 @@
                             <div class="col-md-5">
                                 <h2 class="invoice-client mrg10T">Seleccionar mercadería</h2>
                                 <div class="row">
-                                    <div class="col-sm-7">
-                                        <label for="idinventario_mercaderia">Seleccionar un producto </label>
-                                        <select autocomplete="off" name="idinventario_mercaderia" class="form-control input-sm" id="idinventario_mercaderia"
+                                    <div class="col-sm-12">
+                                        <label for="idinventario_mercaderia">Seleccionar Nombre Serie - Marca - Modelo </label>
+                                        <select name="idinventario_mercaderia" class="form-control input-sm" id="idinventario_mercaderia"
                                             >
-                                            <option value="0" selected="">Seleccionar uno</option>
+                                            <option value="0">Seleccionar Nombre, {Serie - Marca - Modelo}</option>
                                             <?php foreach ($idinventario_mercaderia as $key => $x) { ?>
-                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>">Producto: <?= $x->nombre ?> - {Marca: <?= $x->marca ?>, Modelo: <?= $x->modelo ?>}</option>
+                                                <option data-json='{"json":<?= json_encode($x) ?>}' value="<?= $x->idinventario_mercaderia ?>"><?= $x->nombre ?>, {<?= $x->serie ?> - <?= $x->marca ?> - <?= $x->modelo ?>}</option>
                                             <?php } ?>
                                               
                                         </select>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <label for="idcantidad" id=label_cantidad>Cantidad </label>
-                                        <input type="text" id="cantidad" vale="1" name="cantidad" class="form-control" placeholder="Ingresar una cantidad">
                                     </div>
                                     <div class="col-sm-12" style="margin-top:10px">
                                         <label for="idinventario_mercaderia">Agregar Venta</label>
@@ -123,9 +119,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Mercadería/Modelo</th>
+                                    <th>Serie</th>
+                                    <th>Mercadería</th>
                                     <th>Meses de Garantía</th>
-                                    <th>Cantidad</th>
                                     <th style="width: 20%;">Precio</th>
                                     <th colspan="2" style="width: 19%;">Total</th>
                                 </tr>
@@ -144,16 +140,14 @@
                                 <tr class="font-bold font-black">
                                     <td colspan="5"></td>
                                     <td class="text-right">
-                                        <input type="hidden" id="tax" name="tax" value="12">
                                         <div class="input-group">
-                                            12%
-                                            <!--<select name="tax" id="tax" class="form-control">
+                                            <select name="tax" id="tax" class="form-control">
                                                 <?php for ($i=0; $i < 31 ; $i++) {  ?>
                                                     <option <?= $i==12?'selected':'' ?> value="<?= $i ?>"><?= $i ?></option>
                                                     <?php $i++; ?>
                                                 <?php } ?>
-                                            </select><div class="input-group-addon">%</div>-->
-                                            
+                                            </select>
+                                            <div class="input-group-addon">%</div>
                                         </div>
                                     </td>
                                     <td class="font-red" id="tax_amount">$0.00</td>
@@ -350,20 +344,6 @@
                 placeholder: 'Buscar Mercadería',
                 theme: "bootstrap"
             });
-            $("#cantidad").TouchSpin({
-                buttondown_class: 'btn btn-white',
-                buttonup_class: 'btn btn-white',
-                min: 1,
-                max: 99999999,
-                step: 1,
-                decimals: 0,
-                boostat: 1,
-                maxboostedstep: 1,
-                verticalbuttons: false
-            });
-            $('#cantidad').on('input',function(){ 
-                this.value = this.value.replace(/[^0-9]/g,'');
-            });
             $('#body_cliente').on('click', 'button[rel="seleccionar"]', function () {
                 var data = $(this).data('json'),
                         json = data.json,
@@ -379,9 +359,9 @@
                 var html = '';
                 //html += '<tr id="addr'+id+'">'
                 html += '<td>0</td>'
-                html += '<td>'+data.mercaderia.nombre+' / '+data.mercaderia.modelo+'</td>'
+                html += '<td class="serie">'+data.serie+'</td>'
+                html += '<td>'+data.mercaderia.nombre+' - '+data.mercaderia.modelo+'</td>'
                 html += '<td>'+data.garantia.text+' mes(es)</td>'
-                html += '<td class="serie">'+data.cantidad+'</td>'
                 html += '<td><input type="text"  id="precio_'+id+'" precio= "'+id+'" value="'+data.precio+'" placeholder="Precio al público" class="form-control price" ></td>'
                 html += '<td class="" style="vertical-align:middle">'
                 html += '<div class="input-group mb-2 mb-sm-0 " style="display:flex">'
@@ -389,9 +369,7 @@
                 html += '</div>'
                 html += '</td>'
                 html += '<td>'
-                html += '<input type="hidden" class="garantia" value="'+data.garantia.id+'">';
-                html += '<input type="hidden" class="idmarca" value="'+data.idmarca+'">';
-                html += '<input type="hidden" class="modelo" value="'+data.modelo+'">';
+                html += '<input type="hidden" class="garantia" value="'+data.garantia.id+'">'
                 html += '<input type="hidden" class="idinventario_mercaderia" value="'+data.mercaderia.idinventario_mercaderia+'">'
                 html += "<button value='"+(id)+"' class='btn btn-default btn-xs deletes'><i class='fa fa-trash text-danger'></i></button>"
                 html += '</td>'
@@ -399,67 +377,28 @@
                 return html;
             }
 
-            var acciones_select = {
-                resta:function(cantidad){
-                    var data = $('#idinventario_mercaderia option:selected').data('json').json;
-                    data.total = data.total - cantidad;
-                    $('#idinventario_mercaderia option:selected').attr('data-json',JSON.stringify({
-                        json:data
-                    }));
-                    $('#label_cantidad').html('Cantidad');
-                },
-                suma: function(cantidad, value){
-                    var data = $('#idinventario_mercaderia option[value='+value+']').data('json').json;
-                    data.total = data.total*1 + cantidad*1;
-                    $('#idinventario_mercaderia option:selected').attr('data-json',JSON.stringify({
-                        json:data
-                    }));
-                    $('#label_cantidad').html('Cantidad');
-                }
-            }
-
             $('#idinventario_mercaderia').change(function(){
-                
-                var data = $('#idinventario_mercaderia option:selected').data('json').json;
-                $('#cantidad').trigger("touchspin.updatesettings", {
-                    max: data.total
-                });
-                $('#cantidad').val();
-                //data.total = data.total - $('#cantidad').val();
-
-                $('#label_cantidad').html('Cantidades restantes: '+data.total);
+                console.log($('#idinventario_mercaderia option:selected').data('json'))
             })
             
             $("#add_row").click(function() {
                 if($('#idcliente').val()!='0'){
                     var idinventario_mercaderia = $('#idinventario_mercaderia').val();
-                    var cantidad = $('#cantidad').val() || 1;
                     var datosmercaderia = $('#idinventario_mercaderia option:selected').data('json');
+
                     if (typeof datosmercaderia != 'undefined') {
                         if(!existe_mercaderia(idinventario_mercaderia)){
-                            //var serie = datosmercaderia.json.serie;
+                            var serie = datosmercaderia.json.serie;
                             var garantia = datosmercaderia.json.garantia_meses;
                             var idgarantia = datosmercaderia.json.garantia_meses;
-                            if(true){//if(!existe_serie(serie)){
-                                agregar(
-                                    garantia, 
-                                    idgarantia, 
-                                    cantidad, 
-                                    idinventario_mercaderia, 
-                                    datosmercaderia, 
-                                    datosmercaderia.json.precio_venta, 
-                                    datosmercaderia.json.idmarca, 
-                                    datosmercaderia.json.modelo
-                                    );
-
-                                acciones_select.resta(cantidad);
-                                $('#cantidad').val('');
+                            if(!existe_serie(serie)){
+                                agregar(garantia, idgarantia, serie, idinventario_mercaderia, datosmercaderia, datosmercaderia.json.precio_venta);
                                 calc();
                             }else{
                                 alert('La serie ya existe');
                             }
                         }else{
-                            alert('La mercadería ya está ingresada, por favor debe borrar y escoger la cantidad nuevamente')
+                            alert('La mercadería ya está ingresada')
                         }
                     }else{
                         alert('Elegir una mercadería')
@@ -483,11 +422,9 @@
                 }); */
             });
 
-            var agregar = function(garantia, idgarantia, cantidad, idinventario_mercaderia, datosmercaderia, precio, idmarca, modelo){
+            var agregar = function(garantia, idgarantia, serie, idinventario_mercaderia, datosmercaderia,precio){
                 var dat = {
-                    cantidad: cantidad,
-                    idmarca: idmarca,
-                    modelo: modelo,
+                    serie: serie,
                     precio: precio,
                     garantia: {
                         text:garantia,
@@ -527,8 +464,6 @@
             });
 
             var existe_serie = function(ins){
-                return false;
-
                 var existe = false;
                 $('#tab_logic tbody tr').each(function(i, element) {
                     var html = $(this).html();
@@ -564,7 +499,7 @@
                     var html = $(this).html();
                     if (html != '') {
                         //var qty = $(this).find('.qty').val();
-                        var qty = $(this).find('.serie').html();
+                        var qty = 1;
                         var price = $(this).find('.price').val();
                         $(this).find('.total').html((qty * price).toFixed(2));
 
@@ -594,8 +529,6 @@
                 
                 var id = $(this).val();
                 var btn = $(this);
-                var data = $('#addr'+id);
-                acciones_select.suma(data.find('.serie').html(), data.find('.idinventario_mercaderia').val());
                 $('#addr'+id).remove();
 
                 calc();
@@ -611,7 +544,7 @@
                 if(fechai != ''){
                     if(idcuentabancaria != '0'){
                         $.ajax({
-                            url: '<?= base_url() ?>venta/crearnew_2',
+                            url: '<?= base_url() ?>venta/crearnew',
                             type: 'POST',
                             data: data_add_venta(fechai, tipo, cuotas, idcuentabancaria, pago),
                             dataType: 'JSON',
@@ -665,10 +598,8 @@
                         var html = $(this).html();
                         if (typeof ($(this).find('.serie').html()) != 'undefined') {//if (html != '') {
                             detalle_g.push({
-                                cantidad: $(this).find('.serie').html(),
+                                serie: $(this).find('.serie').html(),
                                 costo: 0,
-                                idmarca: $(this).find('.idmarca').val(),
-                                modelo: $(this).find('.modelo').val(),
                                 precio_venta: $(this).find('.price').val(),
                                 garantia_meses: $(this).find('.garantia').val(),
                                 idinventario_mercaderia: $(this).find('.idinventario_mercaderia').val(),

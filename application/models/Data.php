@@ -1145,5 +1145,58 @@ class Data extends CI_Model {
             return $ex->getMessage();
         }
     }
+
+    public function venta_mercaderia_stck() {
+        try {
+            $this->db->select('m.nombre, m.idmercaderia, m.modelo, ma.nombre as marca, count(*) as total');
+            $this->db->from('inventario_mercaderia inv');
+            $this->db->join('mercaderia m', 'inv.idmercaderia = m.idmercaderia');
+            $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
+            $this->db->order_by('inv.serie asc');
+            $this->db->where('inv.estado_inv = 1');
+            $this->db->group_by('inv.idmercaderia');
+            $resultado = $this->db->get();
+            return $resultado->result();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function venta_mercaderia_group() {
+        try {//inv.idinventario_mercaderia,
+            $this->db->select('m.nombre, inv.garantia_meses, inv.precio_venta, m.idmercaderia as idinventario_mercaderia, m.modelo, ma.nombre as marca, inv.serie, count(*)as total, m.idmarca');
+            $this->db->from('inventario_mercaderia inv');
+            $this->db->join('mercaderia m', 'inv.idmercaderia = m.idmercaderia');
+            $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
+            $this->db->where('inv.estado_inv = 1');
+            $this->db->group_by('m.idmercaderia');
+            $this->db->group_by('m.modelo');
+            $this->db->group_by('m.idmarca');
+            $this->db->order_by('m.nombre asc');
+            $resultado = $this->db->get();
+            return $resultado->result();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function venta_mercaderia_buscar($cantidad, $idmarca, $modelo, $idmercaderia) {
+        try {
+            $this->db->select('inv.idinventario_mercaderia');
+            $this->db->from('inventario_mercaderia inv');
+            $this->db->join('mercaderia m', 'inv.idmercaderia = m.idmercaderia');
+            $this->db->join('marca ma', 'ma.idmarca = m.idmarca');
+            $this->db->where('m.idmarca',$idmarca);
+            $this->db->where('m.modelo', $modelo);
+            $this->db->where('m.idmercaderia', $idmercaderia);
+            $this->db->where('inv.estado_inv = 1');
+            $this->db->order_by('rand()');
+            $this->db->limit($cantidad);
+            $resultado = $this->db->get();
+            return $resultado->result_array();
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
     
 }

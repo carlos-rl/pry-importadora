@@ -99,7 +99,7 @@
                                             </thead>
                                             <tbody id="tbody_">
                                                 <tr id='addr0'>
-                                                    <td colspan="8" class="text-center">Ningún dato en la tabla</td>
+                                                    <td colspan="8" class="text-center">Seleccione un rango de fechas</td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>

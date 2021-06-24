@@ -43,7 +43,7 @@ class Inventario extends CI_Controller {
         $crud->set_crud_url_path(base_url('inventario/index'));
 
         
-        $crud->columns('idcompra', 'idmercaderia', 'serie', 'costo', 'precio_venta', 'garantia_meses', 'estado_inv', 'estado');
+        $crud->columns('idcompra', 'idmercaderia', 'serie', 'costo', 'precio_venta', 'garantia_meses', 'estado_inv', 'cantidad', 'estado');
 
         $crud->display_as('idcompra', 'N°  de compra')
         ->display_as('idmercaderia', 'Mercadería - Marca')
@@ -58,7 +58,11 @@ class Inventario extends CI_Controller {
         $crud->unset_edit();
         $crud->unset_delete();
         $crud->unset_read();
+        // $crud->unset_jquery();
+        // $crud->unset_bootstrap();
+        //$crud->unset_jquery_ui();
 
+        
         $crud->callback_column('estado_inv',array($this,'_callback_estado'));
         $crud->callback_column('idcompra',array($this,'_callback_compra'));
         $crud->callback_column('costo',array($this,'_callback_costo'));
@@ -67,8 +71,26 @@ class Inventario extends CI_Controller {
         $crud->callback_column('garantia_meses',array($this,'_callback_meses'));
         $crud->callback_column('estado',array($this,'_callback_estado_ca'));
 
+        $crud->callback_column('cantidad',array($this,'_callback_cantidad'));
+
         
         $this->_example_output($crud);
+    }
+
+    function _callback_cantidad($value, $row){
+        if($row->estado_inv == '<label class="label label-success">Disponible</label>'){
+            return '1';
+        }
+        if($row->estado_inv == '<label class="label label-danger">Vendido</label>'){
+            return '0';
+        }
+        if($row->estado_inv == '<label class="label label-danger">Devuelto en la venta</label>'){
+            return '1';
+        }
+        if($row->estado_inv == '<label class="label label-warning">Devuelto</label>'){
+            return '0';
+        }
+        
     }
 
     function _callback_estado($value, $row){
@@ -118,6 +140,14 @@ class Inventario extends CI_Controller {
                 . '"error" : "El registro no se guardó!!"}';
                 exit();
             }
+        }
+    }
+
+    public function stock() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = (object) $_POST;
+            echo json_encode($this->Data->venta_mercaderia_stck());
+            exit();
         }
     }
 

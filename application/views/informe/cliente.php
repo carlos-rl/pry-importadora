@@ -98,7 +98,7 @@
                                             </thead>
                                             <tbody id="tbody_">
                                                 <tr id='addr0'>
-                                                    <td colspan="7" class="text-center">Ningún dato en la tabla</td>
+                                                    <td colspan="7" class="text-center">Seleccione un filtro de clientes</td>
                                                 </tr>
                                             </tbody>
                                         </table>

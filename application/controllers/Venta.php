@@ -28,7 +28,8 @@ class Venta extends CI_Controller {
             'title' => 'Ventas',
             'nombre' => '',
             'idventa_after' => $this->Data->idVentaMax(),
-            'idinventario_mercaderia' => $this->Data->venta_mercaderia(),
+            'idinventario_mercaderia' => $this->Data->venta_mercaderia_group(),
+            'idinventario_mercaderia_normal' => $this->Data->venta_mercaderia(),
             'idcliente' => $this->Data->venta_cliente(),
             'data_accessos' => $accesos,
             'subtitle' => '',
@@ -120,6 +121,52 @@ class Venta extends CI_Controller {
             //echo $total;
             echo '{"resp" : true, "idventa":'.$idventa.'}';
         }
+    }
+
+    public function crearnew_2() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = (object) $_POST;
+            $detalle = json_decode($_POST['detalle']);
+            $data = array(
+                'idcliente' => $post->idcliente,
+                'fecha' => $post->fecha,
+                'iva' => $post->iva
+            );
+            $idventa = $this->Data->crearVC($data);
+
+
+            $sql = 'INSERT INTO venta_mercaderia(idventa, idinventario_mercaderia, precio) values';
+            $total = 0;
+            for ($i = 0; $i < count($detalle); $i++) {
+                $ins = $detalle[$i];
+
+                $sql .= $this->buscarMercaderia($ins->precio_venta,$idventa, $ins->cantidad,$ins->idmarca, $ins->modelo, $ins->idinventario_mercaderia ) . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+
+                $total = $total + $ins->precio_venta;
+            }
+
+
+            $total = ($total * ($post->iva/100)) + $total;
+
+
+            $this->Data->sql($sql);
+            $this->credito_new($idventa, $post->idcliente, $post->fechai, $post->cuotas, $total, $post->tipo, $post->pago);
+            
+
+
+            //echo $sql;
+            echo '{"resp" : true, "idventa":'.$idventa.'}';
+        }
+    }
+
+    private function buscarMercaderia($precio_venta, $idventa, $cantidad, $idmarca, $modelo, $idmercaderia){
+        $sql = '';
+        $detalle = $this->Data->venta_mercaderia_buscar($cantidad, $idmarca, $modelo, $idmercaderia);
+        for ($i = 0; $i < count($detalle); $i++) {
+            $ins = $detalle[$i];
+            $sql .= '(' . $idventa . ', "' . $ins['idinventario_mercaderia']. '", ' . $precio_venta . ')' . ((count($detalle) == $i + 1) ? ' ' : ' ,');
+        }
+        return $sql;
     }
 
     private function credito_new($idcompra, $idcliente, $fechai, $num_pago, $total, $tipo, $pago) {

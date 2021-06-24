@@ -14,6 +14,28 @@ class Cliente extends CI_Controller {
         $this->load->library('grocery_CRUD');
         $this->load->library('validarIdentificacion');
     }
+
+    public function load_data()
+	{
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            try {
+				$post = (object) $_POST;
+                $this->load->library('datatables_server_side', array(
+                    'table' => 'cliente',
+                    'primary_key' => 'idcliente',
+                    'columns' => array('nombres', 'apellidos', 'telefono'),
+                    'join' => array(),
+                    'where' => array()
+                ));
+                $this->datatables_server_side->process('id');
+            } catch (Exception $ex) {
+                echo '{"resp":false,"sms":"' . $ex->getMessage() . '"}';
+            }
+        } else {
+            show_404();
+        }
+		
+	}
     
     public function _example_output($crud){
         $obtener_permisos = $this->Data->listarDetPag($this->session->userdata('idgrupo'));
@@ -51,7 +73,7 @@ class Cliente extends CI_Controller {
         $output->nombre = 'Administración de Clientes';
         $output->subtitle = 'Puedes hacer todas las acciones de administración';
         
-        $this->load->view('cliente.php',(array)$output);
+        $this->load->view('cliente_old.php',(array)$output);
 	}
 
 	public function index(){
@@ -78,7 +100,6 @@ class Cliente extends CI_Controller {
 
         $crud->add_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion', 'tipo', 'idgrupo');
         $crud->edit_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion', 'tipo', 'idgrupo', 'idcliente');
-
         $crud->set_read_fields('nombres', 'apellidos', 'cedula', 'telefono', 'correo', 'direccion');
 
         $crud->field_type('estado', 'invisible')

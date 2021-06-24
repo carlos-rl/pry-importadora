@@ -159,15 +159,12 @@
                                 <tr class="font-bold font-black">
                                     <td colspan="5"></td>
                                     <td class="text-right">
-                                        <div class="input-group">
-                                            <select name="tax" id="tax" class="form-control">
-                                                <?php for ($i=0; $i < 31 ; $i++) {  ?>
-                                                    <option <?= $i==12?'selected':'' ?> value="<?= $i ?>"><?= $i ?></option>
-                                                    <?php $i++; ?>
-                                                <?php } ?>
-                                            </select>
-                                            <div class="input-group-addon">%</div>
-                                        </div>
+                                        <input type="hidden" name="tax" value="12" id="tax">
+                                        12%
+                                        <!--<div class="input-group">
+                                            
+                                            <div class="input-group-addon">12%</div>
+                                        </div>-->
                                     </td>
                                     <td colspan="3" class="font-red" id="tax_amount">$0.00</td>
                                 </tr>

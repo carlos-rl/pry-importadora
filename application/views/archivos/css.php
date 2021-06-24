@@ -59,6 +59,20 @@
         
         height: 80vh;
     }
+    .bootstrap-timepicker-widget table td input, .chosen-container-multi, .chosen-container-single .chosen-search input, .dataTables_length select, .form-control, .input, .ui-toolbar input, .ui-toolbar select, div.dataTables_filter input {
+            font-weight: 600;
+            color: black;
+        }
+    .col-sm-3.control-label {
+        font-size: 16px;
+        padding-top: 3px;
+        color: black;
+    }
+    h3.title-hero {
+        font-size: 22px;
+        font-weight: 700;
+        color: black;
+    }
     </style>
 <script type="text/javascript">
 $(window).load(function() {

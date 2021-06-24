@@ -15,7 +15,8 @@
             <i class="glyph-icon icon-outdent"></i>
         </a>
     </div>
-    <div class="scroll-sidebar">
+    <!--scroll-sidebar-->
+    <div class="" style="max-height: 90vh;overflow-y: auto;overflow-x: hidden;">
         <ul id="sidebar-menu">
             <li class="header"><span>Administración</span></li>
             <li>

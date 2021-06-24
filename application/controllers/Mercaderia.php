@@ -53,6 +53,9 @@ class Mercaderia extends CI_Controller {
         $crud->set_crud_url_path(base_url('mercaderia/index'));
 
         $crud->set_table('mercaderia');
+        
+        $crud->where('(`mercaderia`.`nombre` LIKE "%l%")');// 
+        
         $crud->columns('nombre','idmarca', 'modelo', 'descripcion');
         $crud->display_as('nombre', 'Nombre de la mercadería')->display_as('modelo', 'Modelo')
         ->display_as('descripcion', 'Descripción')
@@ -65,6 +68,7 @@ class Mercaderia extends CI_Controller {
 
         $crud->set_read_fields('nombre','idmarca', 'modelo', 'descripcion', 'idimportadora');
         $crud->set_relation('idmarca','marca','{nombre}');
+
         $crud->required_fields('idmarca','modelo','nombre');
 
         $crud->field_type('descripcion', 'text')

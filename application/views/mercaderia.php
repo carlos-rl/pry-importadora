@@ -104,7 +104,15 @@
 
         <script>
             $(function(){
-                $('.filter-row input[name="nombre"]').remove()
+                $('.filter-row input[name="nombre"]').attr('name','mercaderia.nombre')
+                // var celda = $('.filter-row > td:nth-child(3)').append('Some text');
+                // celda;
+                /*<div class="input-group">
+      <input type="text" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Buscar</button>
+      </span>
+    </div>*/
             })
         </script>
     </div>

@@ -37,6 +37,8 @@
         font-weight: bold;
     }
     </style>
+    <!-- Data Tables -->
+    <link href="<?= base_url() ?>static/dataTables/responsive.bootstrap.min.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -54,7 +56,18 @@
 
                     </div>
 
-                    <?php echo $output; ?>
+                    
+
+
+                    <table id="users" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>First name</th>
+                                <th>First name</th>
+                                <th>First name</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -65,6 +78,79 @@
 
         <!-- JS Demo -->
         <script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
+        <!-- Data Tables -->
+        <script src="<?= base_url() ?>static/lib/DataTables/media/js/jquery.dataTables.min.js"></script>
+		<script src="<?= base_url() ?>static/lib/DataTables/media/js/dataTables.responsive.min.js"></script>
+		<script src="<?= base_url() ?>static/lib/DataTables/media/js/dataTables.bootstrap.js"></script>
+        <script type="text/javascript">
+		$(document).ready(function() {
+			var table = $('#users').DataTable({
+				serverSide: true,
+                "ajax": {
+                    url: '<?php echo base_url('cliente/load_data'); ?>',
+                    "type": "POST",
+                    data: {
+                        "action": "Jsons",
+                        "fechai": '',
+                        "fechaf": '',
+                        "estado":<?= (isset($_GET['papel'])?0:1) ?>
+                        }
+                },
+                pageLength: 10,
+                responsive: true,
+                language: {
+                        "sSearch": "<span class='fa fa-search'></span> ",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ":Activar para ordenar la columna de manera descendente"
+                        },
+                        "oPaginate": {"sFirst": "Primero", "sLast": "Último", "sNext": "<span class='fa fa-chevron-right'></span>", "sPrevious": "<span class='fa fa-chevron-left'></span>"},
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrando _MENU_",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ <b>Total: </b> _MAX_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros<br>",
+                        "sInfoFiltered": "(de un total de _MAX_ registros)",
+                        "sInfoPostFix": ""
+                    },
+                "columns": [                               
+                        { 
+                            "data": "0", "render": function (d, t, f) {
+                                    return d+'asasss';
+                                },
+                                sDefaultContent: "",
+                                className: 'gradeA',
+                                "orderable": true
+                        },
+                        { 
+                            "data": "1", "render": function (d, t, f) {
+                                    return d+'asasss';
+                                },
+                                sDefaultContent: "",
+                                className: 'gradeA',
+                                "orderable": true
+                        },
+                        { 
+                            "data": "2", "render": function (d, t, f) {
+                                    return d+' <input type="button" class="deleteTrans" value="Delete"/>';
+                                },
+                                sDefaultContent: "",
+                                className: 'gradeA',
+                                "orderable": true
+                        }
+                    ]
+			});
+            $('#users tbody').on('click', '.deleteTrans', function () {
+                var row = $(this).closest('tr');
+                var transactionID = table.row( row ).data()["DT_RowId"];
+                console.log(transactionID);
+            });
+		});
+	</script>
         <script>
             $(function(){
                 $('#field-nombres').on('input',function(){ 

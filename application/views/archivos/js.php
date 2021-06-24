@@ -1,4 +1,4 @@
 <!-- Main vendor Scripts-->
 
 <!-- JS Demo -->
-<script type="text/javascript" src="assets/admin-all-demo.js"></script>
+<script type="text/javascript" src="<?= base_url() ?>static/admin/assets/admin-all-demo.js"></script>
